@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  font-weight: 400;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+textarea::-webkit-scrollbar,
+input::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb,
+input::-webkit-scrollbar-thumb {
+  width: 3px;
+  height: 3px;
+  background: #787878;
+  border-radius: 10px;
+}
+
+.hero1-section {
+  background: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.5),
+      rgba(20, 20, 20, 0.5)
+    ),
+    url("/images/hero1.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.hero2-section {
+  background: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.5),
+      rgba(20, 20, 20, 0.5)
+    ),
+    url("/images/hero2.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.hero3-section {
+  background: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.5),
+      rgba(20, 20, 20, 0.5)
+    ),
+    url("/images/hero3.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.custom-border::before {
+  content: "";
+  display: block;
+  height: 30%;
+  width: 1px;
+  background: #4b505d;
+  position: absolute;
+  top: 50%; /* 이 값을 조절하여 가상 요소의 상단 위치를 변경하세요 */
+  transform: translateY(-50%); /* 세로줄을 중앙에 정렬합니다 */
+  right: 0;
+}
