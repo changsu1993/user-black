@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 import back from "../../../../public/icons/back.svg";
+import customFetch from "@/lib/customfetch";
 
 type PropsType = {
   situation: "승인완료" | "승인대기" | "승인거절" | string;
@@ -32,7 +33,7 @@ const TBRSituation: React.FC<PropsType> = ({
       {text}
     </button>
   );
-  // const [reasonForRejection, setReasonForRejection] = React.useState("");
+  const [reasonForRejection, setReasonForRejection] = React.useState("");
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,6 +63,9 @@ const TBRSituation: React.FC<PropsType> = ({
     /* WAITING = 'WAITING',
       APPROVED = 'APPROVED',
       REJECTED = 'REJECTED', */
+  }
+  const getStatus = async()=>{
+    const response = await customFetch.get('api/v1/mypage/blacks')
   }
 
   // If the status value is REJECTED, you need to display the rejectedReason from the data.
@@ -131,6 +135,7 @@ const TBRSituation: React.FC<PropsType> = ({
                             <Textarea
                               disabled
                               rows={4}
+                                
                               className="min-h-[123px] font-normal text-[14px] text-9egray resize-none max-phone:border-1 max-phone:border-solid max-phone:border-[#d9d9d9]"
                               {...field}
                             />

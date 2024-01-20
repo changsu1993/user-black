@@ -111,54 +111,32 @@ function FindIdForm() {
   
       }
 const handleFindId=()=>{
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", "Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbklkIjoiYWJkdXJhaG1hbiIsInN1YiI6MjIsInJvbGUiOiJVU0VSIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTcwNTYzNzY5NCwiZXhwIjoxNzA4MjI5Njk0fQ.kbB0veaA8cgwUaZ35LBs0AYxKxbVpOenlnmh_A8KACw");
-  myHeaders.append("Content-type", "application/json");
-  
-  var raw = JSON.stringify({
-    "name": "ajha",
-    "email": "abcd@gmai.cc"
-  });
-  
-  var requestOptions:any = {
-    method: 'GET',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
+  let data:any = JSON.stringify( {
+    name:credData.name,
+    email:credData.email
+  })
+ //console.log(data)
+  const accessToken = localStorage.getItem('accessToken')
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'http://3.35.139.125:3000/api/v1/users/login-id',
+    headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${accessToken}`, 
+      'Content-type': 'application/json'
+    },
+    data : data
   };
   
-  fetch("http://3.35.139.125:3000/api/v1/users/login-id", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
-
-//   let data:any = JSON.stringify( {
-//     name:credData.name,
-//     email:credData.email
-//   })
-//  //console.log(data)
-//   const accessToken = localStorage.getItem('accessToken')
-//   let config = {
-//     method: 'get',
-//     maxBodyLength: Infinity,
-//     url: 'http://3.35.139.125:3000/api/v1/users/login-id',
-//     headers: { 
-//       'Content-Type': 'application/json', 
-//       'Authorization': `Bearer ${accessToken}`, 
-//       'Content-type': 'application/json'
-//     },
-//     data : data
-//   };
-  
-//  customFetch.get('/api/v1/users/login-id',config).then((res)=>{
-// console.log(res.data)
-//  }).catch(
-//   (error:any)=>{
-//     console.log(error.response.data.message)
-//     toast.error(error.response.data.message[0])
-//   }
-//  )
+ customFetch.get('api/v1/users/login-id',config).then((res)=>{
+console.log(res.data)
+ }).catch(
+  (error:any)=>{
+    console.log(error.response.data.message)
+    toast.error(error.response.data.message[0])
+  }
+ )
 }
   // faysel1:
   // GET /api/v1/users/login-id

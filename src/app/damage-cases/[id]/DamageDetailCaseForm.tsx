@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 export default function DamageDetailCaseForm() {
   const router = useRouter();
   const form = useForm();
-  const [options, setOptions] = useState([])
+  const [option, setOption]:any = useState([])
 
 
   // faysel1:
@@ -57,18 +57,25 @@ export default function DamageDetailCaseForm() {
   // DELETE /api/v1/mypage/blacks/{id}
   useEffect(()=>{
     getOptions()
+    
       },[])
     const getOptions = ()=>{
       const accessToken = localStorage.getItem('accessToken')
       try {
         customFetch.get('/api/v1/blacks/damagetypes',{headers:{
           Authorization:`Bearer ${accessToken}`
-        }}).then((res)=>{console.log(res.data)
-        
-        setOptions(res.data)
+        }}).then((res)=>{
+
+      
+        const options = res.data.map((item:any, ) => ({
+          label: item.name,
+          value: `type-${item.id}`,
+        }));
+        setOption(options)
+
         }
-        
-        ).catch((e)=>console.log(e))
+
+        ).catch((e)=>console.log(e.message))
       } catch (error:any) {
         toast.error(error.response.data.message)
       }
@@ -220,6 +227,9 @@ export default function DamageDetailCaseForm() {
               피해 유형
             </Label>
             <SelectInput
+            options={[
+              
+             ...option]} 
               className="pl-6 flex w-full text-xs text-d9gray font-normal rounded-none border-d9gray md:flex-1 md:text-[20px] max-sm2:h-[40px] max-sm2:text-[16px] max-phone:pl-2 max-phone:rounded-[5px] max-phone:border-[0.5px] max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:h-[38px] max-phone:w-[160px] max-phone:pr-[2px]"
               placeholder="피해 유형 선택"
             

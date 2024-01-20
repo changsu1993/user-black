@@ -13,6 +13,9 @@ import { SelectInput } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useState } from "react";
+import customFetch from "@/lib/customfetch";
+import { toast } from "react-toastify";
 
 export default function DamageCaseForm({
   viewMode = false,
@@ -22,11 +25,61 @@ export default function DamageCaseForm({
   const router = useRouter();
   const form = useForm();
 
+ const [blackData, setBlackData] = useState({
+  name:"",
+  phone:"",
+  birth:"",
+  damageDate:"",
+  damageContent:"",
+  damageTypeId:"",
+  images:[]
+ })
+const handleChange = (event:any)=>{
+
+   const {name, value}=event.target;
+
+   setBlackData({...blackData, [name]:value})
+ 
+}
   // faysel1:
   // POST /api/v1/blacks
   // This API is used to register a black consumer.
   // You can register up to a maximum of 10 image files.
 
+  const registerBlack = async ()=>{
+    let data = JSON.stringify({
+      "name": blackData.name,
+      "phone": blackData.phone,
+      "birth": blackData.birth,
+      "damageDate": blackData.damageDate,
+      "damageContent": blackData.damageContent,
+      "damageTypeId": blackData.damageTypeId,
+      "images": []
+    });
+try {
+  const accessToken = localStorage.getItem('accessToken')
+  const response = await customFetch.post('api/v1/blacks',
+    data
+  ,{
+     headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${accessToken}`, 
+      'Content-type': 'application/json'
+    },
+  
+  } )
+  if(response.data){
+    toast.success('black added', )
+    router.push('/damage-cases/register/succes');
+  }
+
+} catch (error:any) {
+  toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
+}
+
+     
+
+  }
   // GET /api/v1/blacks/damagetypes
   // This API is for the options of the damageType.
   // You should insert them into the options within the selectInput tag.
@@ -98,6 +151,9 @@ export default function DamageCaseForm({
             </span>
           </Label>
           <Input
+          name="name"
+          value={blackData.name}
+          onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:p-0 max-phone:h-[40px] max-phone:text-[16px] max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none"
             placeholder="블랙컨슈머 이름을 입력해주세요"
@@ -108,7 +164,7 @@ export default function DamageCaseForm({
             "flex flex-col items-start md:flex-row md:items-center p-2 gap-[18px] max-phone:gap-0 max-phone:p-0"
           )}
         >
-          {/* name */}
+          {/* phone */}
           <Label className="w-full max-w-[120px] text-dark33 text-[20px] font-normal placeholder:text-d9gray max-phone:text-[12px] max-phone:relative">
             휴대폰번호
             <span className="pl-2 text-red max-phone:p-1 max-phone:absolute max-phone:bottom-0">
@@ -116,6 +172,9 @@ export default function DamageCaseForm({
             </span>
           </Label>
           <Input
+             name="phone"
+             value={blackData.phone}
+             onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:pl-0 max-phone:h-[40px] max-phone:text-[16px] max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
             placeholder="- (하이픈) 제거 후 입력해주세요"
@@ -134,6 +193,9 @@ export default function DamageCaseForm({
             </span>
           </Label>
           <Input
+             name="birth"
+             value={blackData.birth}
+             onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:pl-0 max-phone:h-[40px] max-phone:text-[16px]  max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
             placeholder="생년월일 6자리를 입력해주세요 (예 : 841225)"
@@ -161,6 +223,16 @@ export default function DamageCaseForm({
               피해 유형
             </Label>
             <SelectInput
+               
+              //  value={blackData.birth} //  onChange={handleChange}
+              
+              onChange={(selectedOption)=>{
+                
+                const newValue = selectedOption?.value || '';
+                setBlackData((prevData) => ({ ...prevData, damageTypeId: newValue }));
+            
+             }}
+   
               className="pl-6 flex md:flex-1 w-full text-xs md:text-[20px] font-normal rounded-none border-d9gray max-sm2:h-[40px] max-phone:!text-[16px]  text-d9gray max-phone:rounded-[50px] max-phone:border-[0.5px] max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:h-[38px] max-phone:w-[160px] max-phone:pr-[2px] max-phone:gap-0 max-phone:text-center"
               placeholder="피해 유형 선택"
               options={[
@@ -193,16 +265,30 @@ export default function DamageCaseForm({
                   피해발생일
                 </Label>
                 <Input
+                   name="damageDate"
+                 //  value={blackData.damageDate}
+
+               
                   type="text"
                   className="flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
                   placeholder="20◉◉-◉◉-◉◉"
                   value={field.value}
                 />
                 <FormCalendar
-                  value={field.value}
+                 value={field.value || ""} 
+                 
                   onChange={(value) => {
+                  
                     if (value) {
+                      const selectedDate = new Date(value);
+                      console.log("value", value)
+                      const isoDateString = selectedDate.toISOString();
+                
+                      // Update the state with ISO string
+                   
                       field.onChange(format(value, "yyyy-M-dd"));
+
+                      setBlackData((prevData) => ({ ...prevData, damageDate: isoDateString }));
                     } else {
                       field.onChange(value);
                     }
@@ -237,6 +323,9 @@ export default function DamageCaseForm({
             </span>
           </Label>
           <Textarea
+             name="damageContent"
+             value={blackData.damageContent}
+             onChange={handleChange}
             className="flex-1 min-h-[277px] resize-none rounded-none border-d9gray max-phone:min-h-[167px] placeholder:text-d9gray text-[20px] font-normal max-phone:text-[16px] max-phone:pl-2 max-phone:rounded-[10px]"
             placeholder="피해 사례를 입력해 주세요"
           />
@@ -340,6 +429,7 @@ export default function DamageCaseForm({
           </Button>
         )}
         <Button
+        onClick={registerBlack}
           type="button"
           variant="accent"
           size="lg"
@@ -348,7 +438,7 @@ export default function DamageCaseForm({
             viewMode && "col-span-4"
           )}
         >
-          <Link href="/damage-cases/register/success">등록 요청하기</Link>
+          등록 요청하기
         </Button>
 
         {/* Element for small screen */}

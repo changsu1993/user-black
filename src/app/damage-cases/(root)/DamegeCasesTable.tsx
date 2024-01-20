@@ -33,6 +33,7 @@ import DeleteCaseDialog from "../[id]/DeleteCaseDialog";
 import rightArrowCustom from "../../../../public/icons/right-arrow-custom.svg";
 import downArrowCustom from "../../../../public/icons/down-arrow.svg";
 import back from "../../../../public/icons/back.svg";
+import customFetch from "@/lib/customfetch";
 
 const TableItem = ({ data }: { data: any }) => {
   const form = useForm();
@@ -298,6 +299,7 @@ const TableItem = ({ data }: { data: any }) => {
 
 const DamegeCasesTable = () => {
   const router = useRouter();
+  const [blacks, setBlack]= useState([]);
 
   const images = [
     "/images/damage-demo.png",
@@ -321,6 +323,23 @@ const DamegeCasesTable = () => {
   // GET /api/v1/mypage/blacks
   // This API displays a list of black consumers that you have registered.
   // The implementation should also include pagination.
+let pageNumber= 1;
+  const getBlacks= async ()=>{
+    const accessToken = localStorage.getItem('accessToken')
+ const response = await customFetch.get(`api/v1/mypage/blacks?page=${pageNumber}`,{
+  headers:{
+    Authorization:`Bearer ${accessToken}`
+  }
+
+ } )
+ setBlack(response.data)
+console.log("data",response.data)
+
+  }
+
+useEffect(()=>{
+ getBlacks()
+},[])
 
   // below code,
   //   <TableCell className="px-3 text-xs text-center border whitespace-nowrap">

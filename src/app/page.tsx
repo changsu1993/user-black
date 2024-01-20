@@ -4,6 +4,7 @@ import LoginDialog from "@/components/dialogs/Login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import customFetch from "@/lib/customfetch";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,11 +20,21 @@ export default function Home() {
   // This API retrieves data on the number of damage case registrations and the number of searches for damage cases.
   // Sure, refer to the comments createBlackCount and searchBlackCount for information and guidance related to these functionalities.
 
+const createSearchCount = async ()=>{
+const response = await customFetch.get('api/v1/create-search-count',)
+}
+
+
   // GET /api/v1/blacks/search
   // This API is used for searching a black consumer's name, mobile phone number, and date of birth.
   // After searching, it redirects to a search results page, where the results of the search should be displayed.
 
   // For more details, please refer to the Swagger documentation."
+
+  const blackSearch = async ()=>{
+    const response = await customFetch.get('api/v1/create-search-count',)
+  }
+
 
   return (
     <main className="min-h-screen">

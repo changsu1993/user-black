@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -12,6 +12,8 @@ import useAlertDialog from "@/components/hooks/stores/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 
 import back from "../../../../public/icons/small-back.svg";
+import customFetch from "@/lib/customfetch";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
@@ -27,6 +29,55 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
+const [InquiryData, setInquiryData]= useState({
+  title:'',
+  content:'',
+  email:'aa@naver.com',
+  phone:'010-1644-6482'
+})
+const handleChange = (event:any)=>{
+const {name, value}=event.target;
+setInquiryData({...InquiryData, [name]:value})
+}
+const sendInquiry = async()=>{
+  const accessToken = localStorage.getItem('accessToken')
+  
+  let data = JSON.stringify({
+title:InquiryData.title,
+content:InquiryData.content,
+email:InquiryData.email,
+phone:InquiryData.phone
+  })
+  if(
+   InquiryData.title&&
+  InquiryData.content&&
+   InquiryData.email&&
+    InquiryData.phone
+  ){
+    try {
+      const response = await customFetch.post('api/v1/post/inquiries', data,{
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      })
+      if(response.data){
+        toast.success('Inquiry Added')
+        setTimeout(() => {
+          router.push("/customer-center/inquiry/success")
+        }, 1000);
+      }
+      console.log(response)
+      
+    } catch (error:any) {
+      toast.error(error.response.data.message)
+    }
+  }else{
+    toast.error("모든 필드를 채워주세요")
+  }
+  
+
+}
+
 
   // faysel1:
   // POST /api/v1/post/inquiries
@@ -105,6 +156,9 @@ export default function Page() {
                 제목
               </Label>
               <Input
+              name="title"
+              value={InquiryData.title}
+              onChange={handleChange}
                 type="text"
                 className="flex-1 max-phone:h-[63px] text-xl font-normal max-phone:pl-[18px] max-phone:text-[16px] max-phone:rounded-[10px] border-[#D9D9D9]"
                 placeholder="제목을 작성해 주세요"
@@ -121,6 +175,9 @@ export default function Page() {
                 문의 내용
               </Label>
               <Textarea
+                name="content"
+                value={InquiryData.content}
+                onChange={handleChange}
                 rows={5}
                 className="flex-1 min-h-[162px] text-xl font-normal bg-transparent border border-d9gray rounded-none resize-none max-phone:pl-[18px] max-phone:min-h-[80px] max-phone:max-h-[80px] max-phone:text-[16px] max-phone:rounded-[10px]"
                 placeholder="문의 내용을 작성해 주세요"
@@ -137,9 +194,12 @@ export default function Page() {
                 이메일 주소
               </Label>
               <Input
+                name="email"
+                value={InquiryData.email}
+                onChange={handleChange}
                 type="text"
                 className="flex-1 max-phone:h-[63px] text-xl font-normal max-phone:pl-[18px] max-phone:text-[16px] max-phone:rounded-[10px] border-[#D9D9D9]"
-                defaultValue="aa@naver.com"
+             
               />
             </div>
 
@@ -153,9 +213,12 @@ export default function Page() {
                 휴대폰번호
               </Label>
               <Input
+                name="phone"
+                value={InquiryData.phone}
+                onChange={handleChange}
                 type="text"
                 className="flex-1 max-phone:h-[63px] text-xl font-normal max-phone:pl-[18px] max-phone:text-[16px] max-phone:rounded-[10px] border-[#D9D9D9]"
-                defaultValue="010-1644-6482"
+  
               />
             </div>
 
@@ -169,9 +232,12 @@ export default function Page() {
                 이메일 주소
               </Label>
               <Input
+                  name="email"
+                  value={InquiryData.email}
+                  onChange={handleChange}
                 type="text"
                 className="flex-1 max-sm2:h-[40px] text-xl font-normal max-sm2:text-[0.7rem]"
-                defaultValue="aa@naver.com"
+          
               />
             </div>
             <div
@@ -181,19 +247,22 @@ export default function Page() {
             >
               {/* phone */}
               <Label className="min-w-[140px] text-xl font-normal text-start text-dark33 max-sm2:text-[1rem] border-[#D9D9D9]">
-                휴대폰번호
+                휴대폰번호eChnag
               </Label>
               <Input
+                name="phone"
+                value={InquiryData.phone}
+                onChange={handleChange}
                 type="text"
                 className="flex-1 text-xl font-normal max-sm2:text-[0.7rem] max-phone:h-[30px]"
-                defaultValue="010-1644-6482"
+          
               />
             </div>
           </div>
 
           <Button
             size={"lg"}
-            onClick={() => router.push("/customer-center/inquiry/success")}
+            onClick={() =>sendInquiry()}
             type="button"
             variant="accent"
             className="w-full mt-[86px] text-xl font-normal max-phone:h-[63px] max-phone:text-[18px] max-phone:mt-[56px] max-phone:bg-[#141414]"
