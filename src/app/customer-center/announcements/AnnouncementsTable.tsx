@@ -135,9 +135,13 @@ const TableItem = ({ name }: { name: any }) => {
     </div>
   );
 };
-
-export default function AnnouncementsTable() {
+interface PropType{
+  data:any
+}
+export default function AnnouncementsTable(data:PropType) {
   const router = useRouter();
+  const [datas, setData] = useState({ data: [] });
+console.log("data fr fr",data["data"]);
   return (
     <>
       <Table className="max-phone:hidden">
@@ -156,7 +160,7 @@ export default function AnnouncementsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tableData.map((data, index) => (
+          {data && data["data"]?.map((data:any, index:any) => (
             <TableRow className="text-abgray" key={index}>
               {/* id */}
               <TableCell className="border pl-[44px] pr-[41px] text-sm text-center whitespace-nowrap">
@@ -164,15 +168,15 @@ export default function AnnouncementsTable() {
               </TableCell>
               {/* title */}
               <TableCell className="max-w-[700px] border pl-[37px] text-sm w-max truncate whitespace-nowrap">
-                {data.name}
+                {data.title}
               </TableCell>
               {/* detail modal */}
               <TableCell className="border px-3 pl-[32px] pr-[33px] text-xs text-center whitespace-nowrap">
-                <AnnouncementDetailsDialog />
+                <AnnouncementDetailsDialog data={data} />
               </TableCell>
               {/* createdAt */}
               <TableCell className="border px-3 pl-[51px] pr-[49px] text-sm text-center font-normal whitespace-nowrap">
-                {data.registrationDateTime}
+                {data.createdAt}
               </TableCell>
             </TableRow>
           ))}

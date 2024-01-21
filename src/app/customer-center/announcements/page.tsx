@@ -11,9 +11,14 @@ import AnnouncementsTable from "./AnnouncementsTable";
 import back from "../../../../public/icons/small-back.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import separator from "../../../../public/icons/separator.svg";
+import customFetch from "@/lib/customfetch";
+import { error } from "console";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const [tableData,setTableData] =useState();
   const handleSearchClick = () => {
     router.push("/customer-center/faqs");
   };
@@ -36,7 +41,22 @@ export default function Page() {
   // If you check the mobile size UI, you may notice that the UI changes differently.
   // Please check both desktop and mobile sizes while working on the API.
   // For more details, please refer to the Swagger documentation."
+//const [] = uses
+ const getNotices = async()=>{
+    const accessToken = localStorage.getItem('accessToken');
+    customFetch.get('api/v1/post/notices', {
+headers:{
+  Authorization:`Bearer ${accessToken}`
+}
+    } ).then((res)=> setTableData(res.data.data)).catch((error:any)=>{
+      toast.error(error.response.data.message.isArray? error.response.data.message[0]:error.response.data.message)
+    })
+  }
 
+  useEffect(()=>{
+  getNotices()
+
+  },[])
   return (
     <main>
       <section
@@ -164,7 +184,7 @@ export default function Page() {
 
         {/* Search Header End */}
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable />
+          <AnnouncementsTable data={tableData}/>
         </div>
       </section>
     </main>

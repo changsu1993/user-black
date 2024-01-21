@@ -94,7 +94,13 @@ export default function SignUpWithIdDialog({
         });
        
       }
-      else {
+      else if(   userData.loginId,
+     userData.password,
+    userData.name,
+       userData.email,
+    userData.email,
+     userData.gosiwonname,
+       userData.gosiwonAddress) {
         let data = JSON.stringify({
           "loginId": userData.loginId,
           "password": userData.password,

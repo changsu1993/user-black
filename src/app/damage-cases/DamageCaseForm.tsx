@@ -13,7 +13,7 @@ import { SelectInput } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import customFetch from "@/lib/customfetch";
 import { toast } from "react-toastify";
 
@@ -24,29 +24,37 @@ export default function DamageCaseForm({
 }) {
   const router = useRouter();
   const form = useForm();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [option, setOption]: any = useState([])
+  const [blackData, setBlackData] = useState({
+    name: "",
+    phone: "",
+    birth: "",
+    damageDate: "",
+    damageContent: "",
+    damageTypeId: "",
+    images: []
+  })
+  const handleChange = (event: any) => {
 
- const [blackData, setBlackData] = useState({
-  name:"",
-  phone:"",
-  birth:"",
-  damageDate:"",
-  damageContent:"",
-  damageTypeId:"",
-  images:[]
- })
-const handleChange = (event:any)=>{
+    const { name, value } = event.target;
 
-   const {name, value}=event.target;
+    setBlackData({ ...blackData, [name]: value })
 
-   setBlackData({...blackData, [name]:value})
- 
-}
+  }
+  const formData = new FormData();
   // faysel1:
   // POST /api/v1/blacks
   // This API is used to register a black consumer.
   // You can register up to a maximum of 10 image files.
 
-  const registerBlack = async ()=>{
+
+
+  const registerBlack = async () => {
+    // const promises = selectedImages.map((image) => readFileAsBase64(image));
+    // const base64Images = await Promise.all(promises);
+
     let data = JSON.stringify({
       "name": blackData.name,
       "phone": blackData.phone,
@@ -54,32 +62,69 @@ const handleChange = (event:any)=>{
       "damageDate": blackData.damageDate,
       "damageContent": blackData.damageContent,
       "damageTypeId": blackData.damageTypeId,
-      "images": []
+     // "image": formData
     });
-try {
-  const accessToken = localStorage.getItem('accessToken')
-  const response = await customFetch.post('api/v1/blacks',
-    data
-  ,{
-     headers: { 
-      'Content-Type': 'application/json', 
-      'Authorization': `Bearer ${accessToken}`, 
-      'Content-type': 'application/json'
-    },
+    if (blackData.phone &&
+      blackData.birth &&
+      blackData.damageDate &&
+      blackData.damageContent &&
+      blackData.damageTypeId &&
+      blackData.images){
+        try {
+          const accessToken = localStorage.getItem('accessToken')
+          const response = await customFetch.post('api/v1/blacks',
+            data
+            , {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-type': 'application/json'
+              },
   
-  } )
-  if(response.data){
-    toast.success('black added', )
-    router.push('/damage-cases/register/succes');
+            })
+          if (response.data) {
+            toast.success('black added',)
+            router.push('/damage-cases/register/succes');
+          }
+  
+        } catch (error: any) {
+          toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
+        }
+      }else{
+        toast.error('모든 필드를 채워주세요')
+      }
+    
   }
+  const handleFileInputChange = (event: any) => {
+    const files: any = event.target.files
+    if (files) {
+      // Convert the FileList to an array of blobs
+      const newImages = Array.from(files);
 
-} catch (error:any) {
-  toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
-}
+      // Limit the number of selected images to 10
+      const limitedImages: any = newImages.slice(0, 10);
 
      
 
-  }
+      // Append each image to the FormData object
+      limitedImages.forEach((image:any, index:any) => {
+        formData.append(`image${index + 1}`, image);
+      });
+
+      // Update the local state with the selected images
+      setSelectedImages(limitedImages);
+      console.log(formData)
+    }
+
+    // Convert the FileList to an array of blobs
+
+
+    // Update the local state with the selected images
+
+
+
+ 
+  };
   // GET /api/v1/blacks/damagetypes
   // This API is for the options of the damageType.
   // You should insert them into the options within the selectInput tag.
@@ -89,6 +134,38 @@ try {
   // Please check both desktop and mobile sizes while working on the API.
 
   // For more details, please refer to the Swagger documentation."
+
+  useEffect(() => {
+    getOptions()
+
+  }, [])
+  const getOptions = () => {
+    const accessToken = localStorage.getItem('accessToken')
+    try {
+      customFetch.get('/api/v1/blacks/damagetypes', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }).then((res) => {
+
+
+        const options = res.data.map((item: any,) => ({
+          label: item.name,
+          value: `type-${item.id}`,
+        }));
+        setOption(options)
+
+      }
+
+      ).catch((e) => console.log(e.message))
+    } catch (error: any) {
+      toast.error(error.response.data.message)
+    }
+
+  }
+
+
+
 
   return (
     <Form {...form}>
@@ -151,9 +228,9 @@ try {
             </span>
           </Label>
           <Input
-          name="name"
-          value={blackData.name}
-          onChange={handleChange}
+            name="name"
+            value={blackData.name}
+            onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:p-0 max-phone:h-[40px] max-phone:text-[16px] max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none"
             placeholder="블랙컨슈머 이름을 입력해주세요"
@@ -172,9 +249,9 @@ try {
             </span>
           </Label>
           <Input
-             name="phone"
-             value={blackData.phone}
-             onChange={handleChange}
+            name="phone"
+            value={blackData.phone}
+            onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:pl-0 max-phone:h-[40px] max-phone:text-[16px] max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
             placeholder="- (하이픈) 제거 후 입력해주세요"
@@ -193,9 +270,9 @@ try {
             </span>
           </Label>
           <Input
-             name="birth"
-             value={blackData.birth}
-             onChange={handleChange}
+            name="birth"
+            value={blackData.birth}
+            onChange={handleChange}
             type="text"
             className="flex-1 text-[20px] font-normal placeholder:text-d9gray max-phone:pl-0 max-phone:h-[40px] max-phone:text-[16px]  max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
             placeholder="생년월일 6자리를 입력해주세요 (예 : 841225)"
@@ -223,32 +300,34 @@ try {
               피해 유형
             </Label>
             <SelectInput
-               
+              options={[
+
+                ...option]}
               //  value={blackData.birth} //  onChange={handleChange}
-              
-              onChange={(selectedOption)=>{
-                
+
+              onChange={(selectedOption) => {
+
                 const newValue = selectedOption?.value || '';
                 setBlackData((prevData) => ({ ...prevData, damageTypeId: newValue }));
-            
-             }}
-   
+
+              }}
+
               className="pl-6 flex md:flex-1 w-full text-xs md:text-[20px] font-normal rounded-none border-d9gray max-sm2:h-[40px] max-phone:!text-[16px]  text-d9gray max-phone:rounded-[50px] max-phone:border-[0.5px] max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:h-[38px] max-phone:w-[160px] max-phone:pr-[2px] max-phone:gap-0 max-phone:text-center"
               placeholder="피해 유형 선택"
-              options={[
-                {
-                  label: "A 유형",
-                  value: "type-a",
-                },
-                {
-                  label: "B 유형",
-                  value: "type-b",
-                },
-                {
-                  label: "C 유형",
-                  value: "type-c",
-                },
-              ]}
+            // options={[
+            //   {
+            //     label: "A 유형",
+            //     value: "type-a",
+            //   },
+            //   {
+            //     label: "B 유형",
+            //     value: "type-b",
+            //   },
+            //   {
+            //     label: "C 유형",
+            //     value: "type-c",
+            //   },
+            // ]}
             />
           </div>
           <FormField
@@ -265,27 +344,27 @@ try {
                   피해발생일
                 </Label>
                 <Input
-                   name="damageDate"
-                 //  value={blackData.damageDate}
+                  name="damageDate"
+                  //  value={blackData.damageDate}
 
-               
+
                   type="text"
                   className="flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none"
                   placeholder="20◉◉-◉◉-◉◉"
                   value={field.value}
                 />
                 <FormCalendar
-                 value={field.value || ""} 
-                 
+                  value={field.value || ""}
+
                   onChange={(value) => {
-                  
+
                     if (value) {
                       const selectedDate = new Date(value);
                       console.log("value", value)
                       const isoDateString = selectedDate.toISOString();
-                
+
                       // Update the state with ISO string
-                   
+
                       field.onChange(format(value, "yyyy-M-dd"));
 
                       setBlackData((prevData) => ({ ...prevData, damageDate: isoDateString }));
@@ -323,9 +402,9 @@ try {
             </span>
           </Label>
           <Textarea
-             name="damageContent"
-             value={blackData.damageContent}
-             onChange={handleChange}
+            name="damageContent"
+            value={blackData.damageContent}
+            onChange={handleChange}
             className="flex-1 min-h-[277px] resize-none rounded-none border-d9gray max-phone:min-h-[167px] placeholder:text-d9gray text-[20px] font-normal max-phone:text-[16px] max-phone:pl-2 max-phone:rounded-[10px]"
             placeholder="피해 사례를 입력해 주세요"
           />
@@ -339,6 +418,7 @@ try {
                 "flex p-2 flex-col md:flex-row gap-[18px] w-full max-phone:gap-2"
               )}
             >
+
               {/* files */}
               <Label className="w-full max-w-[120px] text-dark33 max-phone:text-[12px] max-phone:pl-0 mt-[21px]">
                 사진첨부
@@ -348,10 +428,15 @@ try {
                   <div className="flex flex-col items-start gap-[18px] flex-1 md:flex-row md:items-center max-phone:relative max-phone:w-full">
                     <Input
                       type="text"
-                      className="flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none self-start"
+
+
+                      onClick={() => fileInputRef.current?.click()}
+                      className=" flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none self-start"
                       placeholder="N개의 사진이 선택되었습니다."
-                      value={field.value}
+
                     />
+
+
                     <button
                       className={cn(
                         "text-[20px] font-normal text-white leading-[26px] tracking-[-0.6px] px-[38px] ",
@@ -374,19 +459,19 @@ try {
                 </div>
                 <div>
                   <div className="mt-[22px] flex flex-col gap-[14px] md:flex-row md:items-center max-phone:grid max-phone:grid-cols-4 max-sm2:grid-cols-2">
-                    {[
-                      "블랙리스트.jpeg",
-                      "블랙리스트.png",
-                      "블랙리스트.jpg",
-                      "블랙리스트.jpg",
-                    ].map((filename, index) => (
+                    {selectedImages.map((filename:any, index) => (
                       <div
                         key={index}
                         className="flex items-center justify-between gap-2 px-3 py-1 h-[34px] border border-d9gray max-phone:w-[78px] max-phone:h-[20px] max-phone:gap-0 max-phone:px-[7px] max-phone:pl-[6px] max-phone:pr-[3px]"
                       >
-                        <p className="text-[14px] font-normal leading-[18px] tracking-[-0.42px] text-d9gray max-phone:text-[8px] truncate">
-                          {filename}
-                        </p>
+                       {
+                  
+                        filename && filename[index] &&(
+
+<p className="text-[14px] font-normal leading-[18px] tracking-[-0.42px] text-d9gray max-phone:text-[8px] truncate">
+                          {filename} 
+                        </p>                        )
+                       } 
                         {!viewMode && (
                           <button className="text-white  w-[19px] h-[19px] bg-d9gray rounded-full p-1 max-phone:w-[14px] max-phone:h-[14px]">
                             <Cross1Icon className="w-full h-full" />
@@ -429,7 +514,7 @@ try {
           </Button>
         )}
         <Button
-        onClick={registerBlack}
+          onClick={registerBlack}
           type="button"
           variant="accent"
           size="lg"
@@ -458,6 +543,17 @@ try {
           &#123;필수항목명&#125;을(를) 입력해주세요
         </p>
       </div>
+      <Input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        hidden
+        multiple
+        accept=".jpg, .jpeg, .gif, .png, .bmp"
+        className="hidden w-[0px h-0px]"
+
+
+      />
     </Form>
   );
 }

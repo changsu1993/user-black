@@ -25,9 +25,9 @@ export default function FindCredsDialog({
   trigger,
 }: Props) {
   const [isMobile, setIsMobile] = useState(false);
- 
 
- 
+
+
   useEffect(() => {
     onOpenChange?.(open);
   }, [onOpenChange, open]);
@@ -95,55 +95,65 @@ export default function FindCredsDialog({
 
 function FindIdForm() {
   const form = useForm();
-  const [credData, setcredsData] = useState({
-    email:"",
-    name:""
+  const [credData, setCredData] = useState({
+    email: "",
+    name: ""
   })
-  const [loginId, setLogin]= useState('sky')
+  const [loginId, setLogin] = useState('login-id')
 
 
 
- 
-  const handleOnchange = (event:any)=>{
-    const {name, value} = event.target;
-    
-    setcredsData({...credData, [name]:value})
-  
-      }
-const handleFindId=()=>{
-  let data:any = JSON.stringify( {
-    name:credData.name,
-    email:credData.email
-  })
- //console.log(data)
-  const accessToken = localStorage.getItem('accessToken')
-  let config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: 'http://3.35.139.125:3000/api/v1/users/login-id',
-    headers: { 
-      'Content-Type': 'application/json', 
-      'Authorization': `Bearer ${accessToken}`, 
-      'Content-type': 'application/json'
-    },
-    data : data
-  };
-  
- customFetch.get('api/v1/users/login-id',config).then((res)=>{
-console.log(res.data)
- }).catch(
-  (error:any)=>{
-    console.log(error.response.data.message)
-    toast.error(error.response.data.message[0])
-  }
- )
-}
+
+
   // faysel1:
   // GET /api/v1/users/login-id
   // This API is used to find a user's ID.
   // When a user inputs their ID and email for a query, you need to insert the ID obtained from the data into the space at code line 160 where it says ID : example123.
 
   // For more details, please refer to the Swagger documentation."
+
+  const handleOnchange = (event: any) => {
+    const { name, value } = event.target;
+
+    setCredData({ ...credData, [name]: value })
+
+  }
+  const handleFindId = () => {
+    let data: any = JSON.stringify({
+      email: credData.email
+    })
+    //console.log(credData)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Example usage:
+;
+    if (credData.name && credData.email && emailRegex.test(credData.email)) {
+      const accessToken = localStorage.getItem('accessToken')
+      let config = {
+    
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-type': 'application/json'
+        },
+       
+      };
+
+      customFetch.get(`api/v1/users/login-id?name=${encodeURIComponent(credData.name)}&email=${encodeURIComponent(credData.email)}`, config).then((res) => {
+        console.log(res.data)
+        setLogin(res.data.loginId)
+      }).catch(
+        (error: any) => {
+          console.log(error.response.data.message)
+          toast.error(error.response.data.message.isArray? error.response.data.message[0]:error.response.data.message)
+        }
+      )
+    } else {
+      toast.error("모든 필드를 채워주세요")
+    }
+
+  }
+
   return (
     <div className="mt-[49px] w-full">
       <h3 className="text-[35px] font-normal leading-[39px] tracking-[-1.05px] max-phone:text-[26px] max-phone:leading-normal">
@@ -167,9 +177,9 @@ console.log(res.data)
                   </FormLabel>
                   <FormControl>
                     <Input
-                    name="name"
-                    value={credData.name}
-                    onChange={handleOnchange}
+                      name="name"
+                      value={credData.name}
+                      onChange={handleOnchange}
                       className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
                       max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight  "
                       placeholder="최소 두 글자 이상 입력"
@@ -188,9 +198,9 @@ console.log(res.data)
                   </FormLabel>
                   <FormControl>
                     <Input
-                           name="email"
-                           value={credData.email}
-                           onChange={handleOnchange}
+                      name="email"
+                      value={credData.email}
+                      onChange={handleOnchange}
                       className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
                       max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight max-phone:mb-[38px]"
                       placeholder="이메일 @ 도메인 입력"
@@ -221,9 +231,9 @@ console.log(res.data)
           </div>
           <div className="w-full mt-11">
             <Button
-            onClick={handleFindId}
+                onClick={handleFindId}
               variant="dark-gray"
-              className="w-full max-phone:bg-[#141414]"
+              className="w-full max-phone:bg-[#e1dede]"
             >
               확인
             </Button>
@@ -236,7 +246,74 @@ console.log(res.data)
 
 function FindPasswordForm() {
   const form = useForm();
+  const [userFound, setUserFound] = useState(false)
+  const [credData, setCredData] = useState({
+    loginId: "",
+    email: "",
+    name: ""
+  })
+  const [changePass, setChangePass] = useState({
+    password: "",
+    confPassword: ""
+  })
+  const [userID, setUserId] = useState();
 
+
+
+
+
+
+
+  const handleOnchange = (event: any) => {
+    const { name, value } = event.target;
+
+    setCredData({ ...credData, [name]: value })
+    setChangePass({ ...changePass, [name]: value })
+  }
+  const handleFindId = async () => {
+
+    //console.log(data)
+    if (credData.name && credData.email && credData.loginId) {
+      let data: any = {
+        "loginId": credData.loginId,
+        "name": credData.name,
+        "email": credData.email
+      }
+      const accessToken = localStorage.getItem('accessToken')
+      console.log(data)
+        ;
+
+      await customFetch.get(`api/v1/users/id?name=${encodeURIComponent(credData.name)}&loginId=${encodeURIComponent(credData.loginId)}&email=${encodeURIComponent(credData.email)}`, {
+
+
+      }).then((res) => {
+        setUserFound(true);
+        setUserId(res.data.userId)
+        console.log(res.data.userId)
+      }).catch(
+        (error: any) => {
+          console.log(error.response.data.message)
+          toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
+        }
+      )
+    } else {
+      toast.error("모든 필드를 채워주세요")
+    }
+
+  }
+
+
+  const resetChangePassword = async () => {
+if(changePass.confPassword != changePass.password){
+  toast.error("Password MisMatch")
+}else{
+    customFetch.patch(`api/v1/users/password/${userID}`,{
+      "password":changePass.password
+    })
+    toast.success("Password Updated")
+  
+  }
+  }
   // faysel1:
   // GET /api/v1/users/id
   // This API is for finding a user's password.
@@ -274,6 +351,9 @@ function FindPasswordForm() {
                   </FormLabel>
                   <FormControl>
                     <Input
+                      name="loginId"
+                      value={credData.loginId}
+                      onChange={handleOnchange}
                       className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
                       max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
                       placeholder="6~12자 소문자/숫자 입력"
@@ -292,7 +372,9 @@ function FindPasswordForm() {
                   </FormLabel>
                   <FormControl>
                     <Input
-              
+                      name="name"
+                      value={credData.name}
+                      onChange={handleOnchange}
                       className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
                       max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
                       placeholder="최소 두 글자 이상 입력"
@@ -311,6 +393,9 @@ function FindPasswordForm() {
                   </FormLabel>
                   <FormControl>
                     <Input
+                      name="email"
+                      value={credData.email}
+                      onChange={handleOnchange}
                       className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
                       max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
                       placeholder="이메일 @ 도메인 입력"
@@ -325,75 +410,89 @@ function FindPasswordForm() {
               (입력한 정보와 일치하는 계정 정보가 없습니다)
             </p>
             <Button
+              onClick={handleFindId}
               variant="dark-gray"
               className="w-full max-phone:bg-[#141414]"
             >
               확인
             </Button>
           </div>
-
           {/* This UI should only be displayed when the "GET /api/v1/users/id" API is called and a userId is issued. 
-          You can set the appropriate conditions to ensure this. */}
+    
+    
+    You can set the appropriate conditions to ensure this. */}
+          {
+            userFound && (
 
-          {/* <div className="mt-[79px]">
-            <h3 className="phone:hidden mb-[23px] text-[35px] max-phone:text-[26px] max-phone:leading-normal leading-[39px] tracking-[-1.05px]">
-              비밀번호 변경
-            </h3>
-            <p className="text-base font-medium leading-[18px] tracking-[-0.48px] text-dark33 max-phone:mb-[35px]">
-              새로운{" "}
-              <span className="max-phone:text-[#28BEE1]">비밀번호를</span>{" "}
-              입력해주세요
-            </p>
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="space-y-[4px]">
-                    <FormLabel className="text-base font-normal text-dark33 leading-[25px] max-phone:text-[12px]">
-                      비밀번호
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
-                        max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
-                        placeholder="6자리 이상 영문/숫자 조합"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confPassword"
-                render={({ field }) => (
-                  <FormItem className="space-y-[4px]">
-                    <FormLabel className="text-base font-normal text-dark33 leading-[25px] max-phone:text-[12px]">
-                      비밀번호 확인
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
-                        max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
-                        placeholder="6자리 이상 영문/숫자 조합"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mt-[30px] w-full">
-              <p className="phone:hidden mb-[20px] text-[#f00] text-center text-[12px] font-light">
-                (비밀번호를 확인 해주세요)
-              </p>
-              <Button
-                variant="dark-gray"
-                className="w-full max-phone:bg-[#141414]"
-              >
-                비밀번호 변경
-              </Button>
-            </div>
-          </div> */}
+              <div className="mt-[79px]">
+                <h3 className="phone:hidden mb-[23px] text-[35px] max-phone:text-[26px] max-phone:leading-normal leading-[39px] tracking-[-1.05px]">
+                  비밀번호 변경
+                </h3>
+                <p className="text-base font-medium leading-[18px] tracking-[-0.48px] text-dark33 max-phone:mb-[35px]">
+                  새로운{" "}
+                  <span className="max-phone:text-[#28BEE1]">비밀번호를</span>{" "}
+                  입력해주세요
+                </p>
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="space-y-[4px]">
+                        <FormLabel className="text-base font-normal text-dark33 leading-[25px] max-phone:text-[12px]">
+                          비밀번호
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            name="password"
+                            onChange={handleOnchange}
+                            value={changePass.password}
+                            className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
+                  max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
+                            placeholder="6자리 이상 영문/숫자 조합"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="confPassword"
+                    render={({ field }) => (
+                      <FormItem className="space-y-[4px]">
+                        <FormLabel className="text-base font-normal text-dark33 leading-[25px] max-phone:text-[12px]">
+                          비밀번호 확인
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            name="confPassword"
+                            onChange={handleOnchange}
+                            value={changePass.confPassword}
+                            className="rounded-[5px] h-11 px-4 text-base leading-[25px] font-normal tracking-[-0.48px] placeholder:text-secondary border-fagray max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] max-phone:outline-none  max-phone:bg-transparent 
+                  max-phone:px-0 max-phone:placeholder:text-[#D9D9D9] max-phone:text-[16px] max-phone:font-extralight"
+                            placeholder="6자리 이상 영문/숫자 조합"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="mt-[30px] w-full">
+                  <p className="phone:hidden mb-[20px] text-[#f00] text-center text-[12px] font-light">
+                    (비밀번호를 확인 해주세요)
+                  </p>
+                  <Button
+                  onClick={resetChangePassword}
+                    variant="dark-gray"
+                    className="w-full max-phone:bg-[#141414]"
+                  >
+                    비밀번호 변경
+                  </Button>
+                </div>
+              </div>
+            )
+          }
+
         </Form>
       </div>
     </div>
