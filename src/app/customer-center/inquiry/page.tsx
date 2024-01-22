@@ -32,51 +32,15 @@ export default function Page() {
 const [InquiryData, setInquiryData]= useState({
   title:'',
   content:'',
-  email:'aa@naver.com',
-  phone:'010-1644-6482'
+  email:'',
+  phone:'',
+
 })
 const handleChange = (event:any)=>{
 const {name, value}=event.target;
 setInquiryData({...InquiryData, [name]:value})
 }
-const sendInquiry = async()=>{
-  const accessToken = localStorage.getItem('accessToken')
-  
-  let data = JSON.stringify({
-title:InquiryData.title,
-content:InquiryData.content,
-email:InquiryData.email,
-phone:InquiryData.phone
-  })
-  if(
-   InquiryData.title&&
-  InquiryData.content&&
-   InquiryData.email&&
-    InquiryData.phone
-  ){
-    try {
-      const response = await customFetch.post('api/v1/post/inquiries', data,{
-        headers:{
-          Authorization:`Bearer ${accessToken}`
-        }
-      })
-      if(response.data){
-        toast.success('Inquiry Added')
-        setTimeout(() => {
-          router.push("/customer-center/inquiry/success")
-        }, 1000);
-      }
-      console.log(response)
-      
-    } catch (error:any) {
-      toast.error(error.response.data.message)
-    }
-  }else{
-    toast.error("모든 필드를 채워주세요")
-  }
-  
 
-}
 
 
   // faysel1:
@@ -88,7 +52,44 @@ phone:InquiryData.phone
   // If you check the mobile size UI, you may notice that the UI changes differently.
   // Please check both desktop and mobile sizes while working on the API.
   // For more details, please refer to the Swagger documentation."
-
+  const sendInquiry = async()=>{
+    const accessToken = localStorage.getItem('accessToken')
+    
+    let data = JSON.stringify({
+  title:InquiryData.title,
+  content:InquiryData.content,
+  email:InquiryData.email,
+  phone:InquiryData.phone
+    })
+    if(
+     InquiryData.title&&
+    InquiryData.content&&
+     InquiryData.email&&
+      InquiryData.phone
+    ){
+      try {
+        const response = await customFetch.post('api/v1/post/inquiries', data,{
+          headers:{
+            Authorization:`Bearer ${accessToken}`
+          }
+        })
+        if(response.data){
+          toast.success('Inquiry Added')
+          setTimeout(() => {
+            router.push("/customer-center/inquiry/success")
+          }, 1000);
+        }
+        console.log(response)
+        
+      } catch (error:any) {
+        toast.error(error.response.data.message)
+      }
+    }else{
+      toast.error("모든 필드를 채워주세요")
+    }
+    
+  
+  }
   return (
     <main className="min-h-screen">
       <section

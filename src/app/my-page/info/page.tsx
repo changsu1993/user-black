@@ -51,7 +51,24 @@ export default function Page() {
   // faysel1:
   // GET /api/v1/admins/post/notices
   // This API is used to retrieve your personal information.
+  const accessToken = localStorage.getItem('accessToken')
+  const getMypage = async ()=>{
+     customFetch.get('api/v1/mypage/info',{
+      headers:{
+        Authorization:`Bearer ${accessToken}`
+      }
+     }).then((res)=>console.log(res.data))
+  }
+  
+  // PATCH /api/v1/mypage/info
+  // This API is for modifying your personal information.
 
+
+ 
+  // This is a responsive project.
+  // If you check the mobile size UI, you may notice that the UI changes differently.
+  // Please check both desktop and mobile sizes while working on the API.
+  // For more details, please refer to the Swagger documentation.
   const updateMypage = async ()=>{
     if(userData.confPassword != userData.password){
       showAlertDialog({
@@ -86,14 +103,6 @@ try {
    
   
   }
-  // PATCH /api/v1/mypage/info
-  // This API is for modifying your personal information.
-
-  // This is a responsive project.
-  // If you check the mobile size UI, you may notice that the UI changes differently.
-  // Please check both desktop and mobile sizes while working on the API.
-  // For more details, please refer to the Swagger documentation.
-
   return (
     <main className="min-h-screen px-[1rem]">
       <section
@@ -155,11 +164,11 @@ try {
               {/* loginId */}
               <Input
               name="loginId"
-              // value={userData.loginId}
+               value={userData.loginId}
               onChange={handleChange}
                 type="text"
                 className="flex-1 font-normal text-[20px] bg-f1gray cursor-pointer max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none max-phone:bg-transparent"
-                value="aaa123"
+           
                 onClick={() => router.push("/dormant-account")}
               />
             </div>

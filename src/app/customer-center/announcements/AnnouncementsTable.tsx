@@ -20,44 +20,44 @@ import downArrowCustom from "../../../../public/icons/down-arrow.svg";
 
 const tableRows = ["번호", "제목", "상세내용", "등록일시"];
 
-const tableData = [
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-  {
-    name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
-    registrationDateTime: "2022-10-24 ㅣ 16:00:08",
-  },
-];
+// const tableData = [
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+//   {
+//     name: "[고시원 블랙리스트] 블랙리스트 사태의 가장 대표적인 사례라 할 수 있는 ‘팝업씨어터 사건’의 전말과 그 후속조치 이행하여",
+//     registrationDateTime: "2022-10-24 ㅣ 16:00:08",
+//   },
+// ];
 
 const TableItem = ({ name }: { name: any }) => {
   const [expanded, setExpanded] = useState(false);
@@ -141,7 +141,7 @@ interface PropType{
 export default function AnnouncementsTable(data:PropType) {
   const router = useRouter();
   const [datas, setData] = useState({ data: [] });
-console.log("data fr fr",data["data"]);
+console.log("data is :",data["data"]);
   return (
     <>
       <Table className="max-phone:hidden">
@@ -160,7 +160,7 @@ console.log("data fr fr",data["data"]);
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data && data["data"]?.map((data:any, index:any) => (
+          {data && data["data"]?.map((data:any, index:number) => (
             <TableRow className="text-abgray" key={index}>
               {/* id */}
               <TableCell className="border pl-[44px] pr-[41px] text-sm text-center whitespace-nowrap">
@@ -172,7 +172,7 @@ console.log("data fr fr",data["data"]);
               </TableCell>
               {/* detail modal */}
               <TableCell className="border px-3 pl-[32px] pr-[33px] text-xs text-center whitespace-nowrap">
-                <AnnouncementDetailsDialog data={data} />
+                <AnnouncementDetailsDialog data={data[index]} />
               </TableCell>
               {/* createdAt */}
               <TableCell className="border px-3 pl-[51px] pr-[49px] text-sm text-center font-normal whitespace-nowrap">
@@ -185,7 +185,7 @@ console.log("data fr fr",data["data"]);
 
       {/* For small screens */}
       <section className="flex flex-col gap-[20px] transition-all duration-500 phone:hidden">
-        {tableData.map((item, index) => {
+        {data && data["data"]?.map((item:any, index:any) => {
           return (
             <div key={index}>
               <div className="flex justify-between mb-[7px]">
@@ -195,12 +195,12 @@ console.log("data fr fr",data["data"]);
                 </p>
                 {/* createdAt */}
                 <p className="text-[#acacac] text-[12px] tracking-[-0.36px]">
-                  등록일 : {item.registrationDateTime}
+                  등록일 : {item.createdAt}
                 </p>
               </div>
 
               <div>
-                <TableItem name={item.name} />
+                <TableItem name={item.authorName} />
               </div>
             </div>
           );

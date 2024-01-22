@@ -33,17 +33,21 @@ export default function DamageCaseForm({
     birth: "",
     damageDate: "",
     damageContent: "",
-    damageTypeId: "",
+    damageTypeId:'',
     images: []
   })
   const handleChange = (event: any) => {
 
     const { name, value } = event.target;
 
-    setBlackData({ ...blackData, [name]: value })
+
+      // If it's not 'damageType', update the property directly
+      setBlackData({ ...blackData, [name]: value });
+
+   // setBlackData({ ...blackData, [name]: value })
 
   }
-  const formData = new FormData();
+  // const formData = new FormData();
   // faysel1:
   // POST /api/v1/blacks
   // This API is used to register a black consumer.
@@ -62,14 +66,14 @@ export default function DamageCaseForm({
       "damageDate": blackData.damageDate,
       "damageContent": blackData.damageContent,
       "damageTypeId": blackData.damageTypeId,
-     // "image": formData
+     "image": ["blackData.images",""]
     });
+    console.log(data)
     if (blackData.phone &&
       blackData.birth &&
       blackData.damageDate &&
       blackData.damageContent &&
-      blackData.damageTypeId &&
-      blackData.images){
+      blackData.damageTypeId ){
         try {
           const accessToken = localStorage.getItem('accessToken')
           const response = await customFetch.post('api/v1/blacks',
@@ -85,6 +89,8 @@ export default function DamageCaseForm({
           if (response.data) {
             toast.success('black added',)
             router.push('/damage-cases/register/succes');
+          }else{
+            toast.error("Noo")
           }
   
         } catch (error: any) {
@@ -96,25 +102,18 @@ export default function DamageCaseForm({
     
   }
   const handleFileInputChange = (event: any) => {
-    const files: any = event.target.files
+    const files: any = event.target.files;
     if (files) {
-      // Convert the FileList to an array of blobs
       const newImages = Array.from(files);
-
-      // Limit the number of selected images to 10
       const limitedImages: any = newImages.slice(0, 10);
-
-     
-
-      // Append each image to the FormData object
-      limitedImages.forEach((image:any, index:any) => {
-        formData.append(`image${index + 1}`, image);
-      });
-
-      // Update the local state with the selected images
-      setSelectedImages(limitedImages);
-      console.log(formData)
+  
+      setBlackData((prevData) => ({
+        ...prevData,
+        images: limitedImages.map((image: any) => image.webkitRelativePath),
+      }));
+      console.log(limitedImages)
     }
+  };
 
     // Convert the FileList to an array of blobs
 
@@ -124,7 +123,7 @@ export default function DamageCaseForm({
 
 
  
-  };
+  
   // GET /api/v1/blacks/damagetypes
   // This API is for the options of the damageType.
   // You should insert them into the options within the selectInput tag.
@@ -151,10 +150,10 @@ export default function DamageCaseForm({
 
         const options = res.data.map((item: any,) => ({
           label: item.name,
-          value: `type-${item.id}`,
+          value: item.id,
         }));
         setOption(options)
-
+console.log(options)
       }
 
       ).catch((e) => console.log(e.message))
@@ -306,9 +305,10 @@ export default function DamageCaseForm({
               //  value={blackData.birth} //  onChange={handleChange}
 
               onChange={(selectedOption) => {
-
+console.log(selectedOption)
                 const newValue = selectedOption?.value || '';
-                setBlackData((prevData) => ({ ...prevData, damageTypeId: newValue }));
+                setBlackData((prevData) => ({ ...prevData, damageTypeId: selectedOption!.value }));
+                console.log(blackData)
 
               }}
 
@@ -431,7 +431,7 @@ export default function DamageCaseForm({
 
 
                       onClick={() => fileInputRef.current?.click()}
-                      className=" flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none self-start"
+                      className="cursor-pointer outline-dashed flex-1 placeholder:text-d9gray text-[20px] font-normal max-phone:h-[40px] max-phone:text-[16px] max-phone:pl-0 max-phone:border-b-1 max-phone:border-t-0 max-phone:border-r-0 max-phone:border-l-0 max-phone:border-solid max-phone:border-[#d9d9d9] outline-none self-start"
                       placeholder="N개의 사진이 선택되었습니다."
 
                     />
