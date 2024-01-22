@@ -45,6 +45,16 @@ export default function LoginDialog({
      }
   useEffect(() => {
     onOpenChange?.(open);
+    return () => {
+      if (!open) {
+        setLoginData({
+        
+          loginId: "",
+          password: "",
+         
+        });
+      }
+    };
   }, [onOpenChange, open]);
 
   const handleJoinClick = () => {
@@ -83,9 +93,11 @@ export default function LoginDialog({
         toast.success("Login Success", {
           autoClose: 3000,
         });
+        onOpenChange?.(false);
+        setLoginData({loginId:"", password:""})
       }
 
-      router.push("/");
+    
     } catch (error: any) {
       console.log(error);
 

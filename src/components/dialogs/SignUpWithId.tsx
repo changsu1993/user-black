@@ -78,13 +78,27 @@ export default function SignUpWithIdDialog({
   useEffect(() => {
     onOpenChange?.(open);
 
+    // Cleanup function to reset userData when the dialog is closed
+    return () => {
+      if (!open) {
+        setUserData({
+          name: "",
+          email: "",
+          loginId: "",
+          password: "",
+          confPassword: "",
+          phone: "",
+          gosiwonname: "",
+          gosiwonAddress: "",
+        });
+      }
+    };
   }, [onOpenChange, open]);
 
   const handleRegister = async () => {
     try {
-      // console.log(form)
-      console.log(userData)
-        ;
+
+
 
 
 
@@ -92,15 +106,15 @@ export default function SignUpWithIdDialog({
         toast.error("Password Mismatch", {
           autoClose: 3000,
         });
-       
+
       }
-      else if(   userData.loginId,
-     userData.password,
-    userData.name,
-       userData.email,
-    userData.email,
-     userData.gosiwonname,
-       userData.gosiwonAddress) {
+      if (userData.loginId &&
+        userData.password &&
+        userData.name &&
+        userData.email &&
+
+        userData.gosiwonname &&
+        userData.gosiwonAddress) {
         let data = JSON.stringify({
           "loginId": userData.loginId,
           "password": userData.password,
@@ -120,16 +134,18 @@ export default function SignUpWithIdDialog({
             toast.success('Registered SuccessFully ', {
               autoClose: 3000,
             });
-        
-console.log(data)
+            onOpenChange?.(false);
+            console.log(data)
           })
           .catch((error: any) => {
             console.log(error.response.data.message);
             toast.error(error.response.data.message[0], {
               autoClose: 3000,
             });
-          
+
           });
+      } else {
+        toast.error("모든 필드를 작성하십시오")
       }
 
     } catch (e: any) {

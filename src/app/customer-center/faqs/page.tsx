@@ -26,6 +26,9 @@ export default function Page() {
     router.back();
   };
 
+///  GET api/v1/post/faqs   
+
+
   return (
     <main>
       <section

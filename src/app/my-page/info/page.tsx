@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { BsEyeSlash } from "react-icons/bs";
@@ -14,6 +14,7 @@ import useAlertDialog from "@/components/hooks/stores/alert-dialog";
 
 import back from "../../../../public/icons/back.svg";
 import customFetch from "@/lib/customfetch";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
@@ -47,6 +48,9 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
+  useEffect(()=>{
+    getMypage()
+  },[])
 
   // faysel1:
   // GET /api/v1/admins/post/notices
@@ -57,7 +61,7 @@ export default function Page() {
       headers:{
         Authorization:`Bearer ${accessToken}`
       }
-     }).then((res)=>console.log(res.data))
+     }).then((res)=>setUserData({...userData, loginId:res.data.loginId}) ).catch((e)=>toast.error(e.message))
   }
   
   // PATCH /api/v1/mypage/info

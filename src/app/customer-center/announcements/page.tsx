@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const [tableData,setTableData] =useState();
+  const [tableData, setTableData] = useState();
   const handleSearchClick = () => {
     router.push("/customer-center/faqs");
   };
@@ -41,22 +41,22 @@ export default function Page() {
   // If you check the mobile size UI, you may notice that the UI changes differently.
   // Please check both desktop and mobile sizes while working on the API.
   // For more details, please refer to the Swagger documentation."
-//const [] = uses
- const getNotices = async()=>{
+  //const [] = uses
+  const getNotices = async () => {
     const accessToken = localStorage.getItem('accessToken');
     customFetch.get('api/v1/post/notices', {
-headers:{
-  Authorization:`Bearer ${accessToken}`
-}
-    } ).then((res)=> setTableData(res.data.data)).catch((error:any)=>{
-      toast.error(error.response.data.message.isArray? error.response.data.message[0]:error.response.data.message)
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }).then((res) => setTableData(res.data.data)).catch((error: any) => {
+      toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
     })
   }
 
-  useEffect(()=>{
-  getNotices()
+  useEffect(() => {
+    getNotices()
 
-  },[])
+  }, [])
   return (
     <main>
       <section
@@ -160,6 +160,9 @@ headers:{
             {/* Latest Order, Number Order Filter */}
 
             <SelectInput
+              onChange={(e: any) => {
+                console.log(e.value)
+              }}
               className="pl-5 pr-3 text-[25px] font-normal max-sm2:pl-[10px] max-sm2:pr-[10px] max-sm2:gap-1 max-sm2:h-[40px]"
               placeholder="최신순"
               options={[
@@ -184,7 +187,7 @@ headers:{
 
         {/* Search Header End */}
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable data={tableData}/>
+          <AnnouncementsTable data={tableData} />
         </div>
       </section>
     </main>
