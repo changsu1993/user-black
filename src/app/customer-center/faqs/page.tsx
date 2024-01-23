@@ -54,10 +54,10 @@ const getNotices = async () => {
     
      setFaqData(res.data.data)
      setFilteredData(res.data.data)
-  console.log(res.data.data)
+  //console.log(res.data.data)
   
   }).catch((error: any) => {
-    toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
+    toast.error(error.response?.data.message.isArray ? error.response?.data.message[0] : error.response?.data.message)
   })
 }
 

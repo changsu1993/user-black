@@ -141,7 +141,7 @@ interface PropType{
 export default function AnnouncementsTable(data:PropType) {
   const router = useRouter();
   const [datas, setData] = useState({ data: [] });
-console.log("data is :",data["data"]);
+// console.log("data is :",data["data"]);
   return (
     <>
       <Table className="max-phone:hidden">
@@ -207,9 +207,7 @@ console.log("data is :",data["data"]);
         })}
       </section>
 
-      <div className="  flex justify-center">
-        <Pagination />
-      </div>
+    
     </>
   );
 }

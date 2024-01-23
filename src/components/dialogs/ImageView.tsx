@@ -19,6 +19,9 @@ export default function ImageViewDialog({
 }) {
   const [curImage, setCurImage] = useState<number>(0);
   const [open, setOpen] = useState(false);
+  console.log("paths" ,paths);
+  let url =' http://3.35.139.125:3000'
+console.log("img path",`${url}/${paths}`);
 
   useEffect(() => {
     onOpenChange?.(open);
@@ -35,12 +38,12 @@ export default function ImageViewDialog({
       setCurImage(curImage + 1);
     }
   };
-let url =' http://3.35.139.125:3000'
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Image
-          src={` ${url}/${paths}`}
+          src={`${url}${paths}`}
           width={242}
           height={237}
           alt=""

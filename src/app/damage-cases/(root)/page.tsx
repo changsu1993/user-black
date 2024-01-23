@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import DamegeCasesTable from "./DamegeCasesTable";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import back from "../../../../public/icons/back.svg";
 
 const DamegeCases = () => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true)
   const handleInfo = () => {
     router.push("/my-page/info");
   };
@@ -83,7 +83,9 @@ const DamegeCases = () => {
             확인하실 수 있습니다
           </p>
           {/* Table section */}
-          <div className="mt-[54px]">
+
+
+{}          <div className="mt-[54px]">
             <DamegeCasesTable />
           </div>
         </div>

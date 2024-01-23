@@ -15,6 +15,7 @@ import customFetch from "@/lib/customfetch";
 import { error } from "console";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import Pagination from "@/components/Pagination";
 
 export default function Page() {
 
@@ -34,6 +35,9 @@ export default function Page() {
   const router = useRouter();
   const [tableData, setTableData] = useState<TableDataTypes[]>([]);
   const [sorted, setSorted] = useState()
+  const [loading, setLoading] =useState(true)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [filterdData, setFilteredData] = useState<TableDataTypes[]>([]);
   const handleSearchClick = () => {
 
@@ -91,26 +95,31 @@ console.log({filteredObjects});
   //const [] = uses
   const getNotices = async () => {
     const accessToken =localStorage.getItem('accessToken');
-    customFetch.get('api/v1/post/notices', {
+    customFetch.get(`api/v1/post/notices?page=${currentPage}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
-    }).then((res) =>{ 
-      
+    }).then((res:any) =>{ 
+      setLoading(false)
       
       setTableData(res.data.data)
       setFilteredData(res.data.data)
- 
+      setTotalPages(res.meta.last_page);
+      
     
     }).catch((error: any) => {
-      toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
+      toast.error(error.response?.data.message.isArray ? error.response?.data.message[0] : error.response?.data.message)
     })
   }
 
+  const handlePageChange = (newPage:number) => {
+    setCurrentPage(newPage);
+  };
+
   useEffect(() => {
     getNotices()
-   sortByLatest()
-  }, [])
+
+  }, [currentPage])
   return (
     <main>
       <section
@@ -241,9 +250,17 @@ console.log({filteredObjects});
         />
 
         {/* Search Header End */}
-        <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable data={filterdData} />
+        <div className="mt-[53px] w-full max-phone:mt-[30px]"> 
+       { loading?
+ <div className="flex justify-center items-center h-[100%]">
+ <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-500"></div>
+</div>
+:<AnnouncementsTable data={filterdData} />
+       }
         </div>
+        <div className="  flex justify-center">
+        <Pagination />
+      </div>
       </section>
     </main>
   );

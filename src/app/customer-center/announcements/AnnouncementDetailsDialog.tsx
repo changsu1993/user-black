@@ -19,7 +19,7 @@ interface AnnounceMents{
 
 export default function AnnouncementDetailsDialog({data, index}:AnnounceMents) {
   const form = useForm();
-console.log(data, "pa22", index)
+// console.log(data, "pa22", index)
   return (
     <Dialog>
       <DialogTrigger asChild>

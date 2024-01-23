@@ -2,9 +2,9 @@
 const nextConfig = {
   
 
-    images: {
-      domains: ['3.35.139.125'], // Add your domain or IP address here
-    },
+  images: {
+    domains: ['3.35.139.125'], // Add your domain or IP address here
+  },
 
   
 

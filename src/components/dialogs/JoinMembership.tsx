@@ -175,13 +175,15 @@ export default function JoinMembershipDialog({
                     <FormField
                       control={form.control}
                       name="Policy"
+                      
                       render={({ field }) => (
                         <FormItem className="space-y-4">
                           <FormControl>
                             <div className="flex items-center justify-between">
                               <RadioEl
                                 checked={field.value}
-                                onChange={field.onChange}
+                                onChange={(e)=>console.log(e)
+                                }
                                 label={
                                   <span onClick={handleClick2}>
                                     개인정보처리방침{" "}

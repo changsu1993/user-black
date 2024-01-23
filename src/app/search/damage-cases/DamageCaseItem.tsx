@@ -83,7 +83,7 @@ export default function DamageCaseItem({data}:PropType) {
 
           {/* For large screen */}
           <div className="flex flex-col flex-wrap items-center w-full gap-5 max-phone:hidden md:flex-row md:gap-7">
-           {data.imagePaths.map((path:any,index:any) => <ImageViewDialog key={index}/> ) }
+           {data.imagePaths.map((path:any,index:any) => <ImageViewDialog key={index} paths={path}/> ) }
            
            
           </div>
