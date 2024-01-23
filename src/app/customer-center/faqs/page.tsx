@@ -34,7 +34,7 @@ export default function Page() {
 const accessToken = localStorage.getItem("accessToken")
 const getNotices = async () => {
   const accessToken = localStorage.getItem('accessToken');
-  customFetch.get('api/v1/post/notices', {
+  customFetch.get('api/v1/post/faqs?page=1&title=faq', {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

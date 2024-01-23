@@ -18,6 +18,7 @@ import customFetch from "@/lib/customfetch";
 import useAlertDialog from "../hooks/stores/alert-dialog";
 
 
+
 type Props = {
   open?: boolean;
   onOpenChange?: (value: boolean) => void;
@@ -43,7 +44,6 @@ export default function SignUpWithIdDialog({
 
   })
 
-  const { showAlertDialog } = useAlertDialog();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const togglePasswordVisible = () => setPasswordVisible(!passwordVisible);
@@ -104,13 +104,10 @@ export default function SignUpWithIdDialog({
 
 
       if (userData.password != userData.confPassword) {
-        // toast.error("Password Mismatch", {
-        //   autoClose: 3000,
-        // });
-        showAlertDialog({
-          buttonTxt: "확인",
-          content:"Password MisMatch" ,
-        })
+        toast.error("Password Mismatch", {
+          autoClose: 3000,
+        });
+
       }
       if (userData.loginId &&
         userData.password &&

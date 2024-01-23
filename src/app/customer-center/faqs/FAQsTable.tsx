@@ -62,8 +62,8 @@ const TableItem = ({ name }: { name: any }) => {
     setExpanded(!expanded);
   };
 
-  const truncatedName = name.substring(0, 15);
-  const displayedName = expanded ? name : truncatedName;
+  // const truncatedName = name.substring(0, 15);
+  // const displayedName = expanded ? name : truncatedName;
 
   const contentHeight = expanded ? "auto" : "48px";
   const contentPadding = expanded ? "15px 0 10px 18px" : "0 0 0 15px";
@@ -87,7 +87,7 @@ const TableItem = ({ name }: { name: any }) => {
           expanded ? "" : "text-[#acacac]"
         } text-[12px] transition-all duration-500`}
       >
-        {displayedName}
+        {"name"}
         {!expanded && "..."}
       </div>
       <div
@@ -119,9 +119,9 @@ const TableItem = ({ name }: { name: any }) => {
   );
 };
 
-export default function AnnouncementsTable(data:any) {
+export default function AnnouncementsTable({ data }: { data: any[] }) {
   const router = useRouter();
-  console.log("data is", data)
+
   return (
     <>
       <Table className="max-phone:hidden">
@@ -140,19 +140,19 @@ export default function AnnouncementsTable(data:any) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tableData.map((data, index) => (
+          {data && data.map((data:any, index:any) => (
             <TableRow className="text-abgray" key={index}>
               <TableCell className="text-sm border pl-[44px] pr-[40px] text-center whitespace-nowrap">
                 {String(index + 1).padStart(2, "0")}
               </TableCell>
               <TableCell className="text-sm border pl-[36px] pr-[33px] text-center whitespace-nowrap">
-                {data.category}
+                {data.content}
               </TableCell>
               <TableCell className="text-sm border pl-[41px] w-max truncate max-w-[829px] whitespace-nowrap">
-                {data.name}
+                {data.title}
               </TableCell>
               <TableCell className="text-xs border pl-[32px] pr-[31px] text-center whitespace-nowrap">
-                <FAQsDetailsDialog />
+                <FAQsDetailsDialog data={data} />
               </TableCell>
             </TableRow>
           ))}
@@ -161,7 +161,7 @@ export default function AnnouncementsTable(data:any) {
 
       {/* For small screens */}
       <section className="flex flex-col gap-[20px] transition-all duration-500 phone:hidden">
-        {tableData.map((item, index) => {
+        {data &&  data.map((item:any, index:any) => {
           return (
             <div key={index}>
               <div className="flex justify-between mb-[7px]">
