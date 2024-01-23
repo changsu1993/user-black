@@ -218,7 +218,7 @@ export default function Page() {
 
             <SelectInput
               onChange={(e: any) => {
-                sortByLatest()
+               
               }}
               className="pl-5 pr-3 text-[25px] font-normal max-sm2:pl-[10px] max-sm2:pr-[10px] max-sm2:gap-1 max-sm2:h-[40px]"
               placeholder="최신순"

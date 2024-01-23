@@ -119,8 +119,9 @@ const TableItem = ({ name }: { name: any }) => {
   );
 };
 
-export default function AnnouncementsTable() {
+export default function AnnouncementsTable(data:any) {
   const router = useRouter();
+  console.log("data is", data)
   return (
     <>
       <Table className="max-phone:hidden">

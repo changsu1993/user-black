@@ -174,7 +174,7 @@ export default function JoinMembershipDialog({
                   <div className="max-phone:relative">
                     <FormField
                       control={form.control}
-                      name="privacyPolicy"
+                      name="Policy"
                       render={({ field }) => (
                         <FormItem className="space-y-4">
                           <FormControl>

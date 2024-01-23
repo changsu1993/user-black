@@ -12,12 +12,12 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-interface TYpes{
+interface AnnounceMents{
   data:any,
   index:number
 }
 
-export default function AnnouncementDetailsDialog({data, index}:TYpes) {
+export default function AnnouncementDetailsDialog({data, index}:AnnounceMents) {
   const form = useForm();
 console.log(data, "pa22", index)
   return (

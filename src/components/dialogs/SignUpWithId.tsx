@@ -15,7 +15,7 @@ import { SelectEl } from "../ui/select";
 import logoDark from "../../../public/logo-dark.svg";
 import back from "../../../public/icons/back.svg";
 import customFetch from "@/lib/customfetch";
-
+import useAlertDialog from "../hooks/stores/alert-dialog";
 
 
 type Props = {
@@ -43,6 +43,7 @@ export default function SignUpWithIdDialog({
 
   })
 
+  const { showAlertDialog } = useAlertDialog();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const togglePasswordVisible = () => setPasswordVisible(!passwordVisible);
@@ -103,10 +104,13 @@ export default function SignUpWithIdDialog({
 
 
       if (userData.password != userData.confPassword) {
-        toast.error("Password Mismatch", {
-          autoClose: 3000,
-        });
-
+        // toast.error("Password Mismatch", {
+        //   autoClose: 3000,
+        // });
+        showAlertDialog({
+          buttonTxt: "확인",
+          content:"Password MisMatch" ,
+        })
       }
       if (userData.loginId &&
         userData.password &&

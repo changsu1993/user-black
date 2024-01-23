@@ -12,10 +12,12 @@ import back from "../../../../public/icons/small-back.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import separator from "../../../../public/icons/separator.svg";
 import customFetch from "@/lib/customfetch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
+  const [faqData, setFaqData]= useState<any>([])
   const handleNoticeClick = () => {
     router.push("/customer-center/announcements");
   };
@@ -30,20 +32,27 @@ export default function Page() {
 
 ///  GET api/v1/post/faqs   
 const accessToken = localStorage.getItem("accessToken")
- const getFaqs = ()=>{
-  let pageNUmber= 1;
-customFetch.get(`api/v1/post/faqs?page=${pageNUmber}&title=faq`,{
-headers:{
-  Authorization:`Bearer ${accessToken}`
+const getNotices = async () => {
+  const accessToken = localStorage.getItem('accessToken');
+  customFetch.get('api/v1/post/notices', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  }).then((res) =>{ 
+    
+    
+     setFaqData(res.data.data)
+  console.log(res.data.data)
+  
+  }).catch((error: any) => {
+    toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
+  })
 }
-},
-).then(e=>console.log(e)).catch(e=>e.message)
- }
 
-useEffect(()=>{
-
-getFaqs()
-},[])
+useEffect(() => {
+  getNotices()
+// sortByLatest()
+}, [])
 
   return (
     <main>
@@ -231,7 +240,7 @@ getFaqs()
         />
 
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable />
+          <AnnouncementsTable data={faqData} /> 
         </div>
       </section>
     </main>
