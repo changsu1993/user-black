@@ -60,7 +60,7 @@ export default function DamageDetailCaseForm() {
     
       },[])
     const getOptions = ()=>{
-      const accessToken = localStorage.getItem('accessToken')
+      const accessToken =localStorage.getItem('accessToken')
       try {
         customFetch.get('/api/v1/blacks/damagetypes',{headers:{
           Authorization:`Bearer ${accessToken}`

@@ -55,7 +55,7 @@ export default function Page() {
   // faysel1:
   // GET /api/v1/admins/post/notices
   // This API is used to retrieve your personal information.
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken =localStorage.getItem('accessToken')
   const getMypage = async ()=>{
      customFetch.get('api/v1/mypage/info',{
       headers:{
@@ -80,7 +80,7 @@ export default function Page() {
         content:"Password MisMatch" ,
       })
     }
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken =localStorage.getItem('accessToken');
     const data = JSON.stringify({
       password:userData.password, name:userData.name, email:userData.email,
     });

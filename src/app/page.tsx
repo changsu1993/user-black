@@ -7,13 +7,13 @@ import { Label } from "@/components/ui/label";
 import customFetch from "@/lib/customfetch";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import Router  from "next/router";
+import { useRouter }  from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
+import useStore from '../lib/damageCaseStore';
 export default function Home() {
-  // const router = useRouter();
- 
+   const router = useRouter();
+ const {addDamage } = useStore()
 
   const [searchData, setSearchData] = useState({
      name:"",
@@ -35,14 +35,15 @@ export default function Home() {
 try {
   const response =  await customFetch.get(`api/v1/blacks/search?${queryParams.toString()}`)
   if(response){
+    addDamage(response.data)
     toast.success("done")
+    console.log(response.data);
     
-    Router.push({
-      pathname:'/search/damage-cases',
-      
-    })
+   router.push(
+    '/search/damage-cases',
+    )
    // router.replace("");
-} 
+}else 
 
  
 ;

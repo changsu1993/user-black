@@ -71,12 +71,12 @@ const TBRSituation: React.FC<PropsType> = ({
   // If the status value is REJECTED, you need to display the rejectedReason from the data.
 
   switch (situation) {
-    case "승인완료":
+    case "승인완료" || "Approved":
       return renderButton(
         situation,
         "w-[66px] h-[25px] font-normal text-[12px] bg-abgray text-white"
       );
-    case "승인대기":
+    case "승인대기" :
       return renderButton(
         situation,
         "w-[66px] h-[25px] font-normal text-[12px] text-abgray border border-abgray"

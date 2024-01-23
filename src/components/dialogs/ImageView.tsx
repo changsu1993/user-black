@@ -10,9 +10,12 @@ const imagesArray = [
 ];
 
 export default function ImageViewDialog({
-  onOpenChange,
+   onOpenChange,
+   paths
+  
 }: {
   onOpenChange?: (value: boolean) => void;
+  paths?:string
 }) {
   const [curImage, setCurImage] = useState<number>(0);
   const [open, setOpen] = useState(false);
@@ -32,12 +35,12 @@ export default function ImageViewDialog({
       setCurImage(curImage + 1);
     }
   };
-
+let url =' http://3.35.139.125:3000'
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Image
-          src={"/images/damage-case.png"}
+          src={` ${url}/${paths}`}
           width={242}
           height={237}
           alt=""

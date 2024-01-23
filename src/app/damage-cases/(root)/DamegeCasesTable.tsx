@@ -90,16 +90,14 @@ const TableItem = ({ data }: { data: any }) => {
         height: contentHeight,
         transition: "height 0.3s",
       }}
-      className={`mb-[4rem]  ${
-        expanded ? "" : "rounded-[60px] transition-all"
-      }`}
+      className={`mb-[4rem]  ${expanded ? "" : "rounded-[60px] transition-all"
+        }`}
     >
       <section
-        className={`phone:hidden relative flex  px-3 mx-auto ${
-          expanded
+        className={`phone:hidden relative flex  px-3 mx-auto ${expanded
             ? "bg-[#f3f4f6] rounded-[15px] pt-[15px] pr-[21px] pb-[24px] pl-[19px] mt-[7px] justify-center w-[340px]"
             : "bg-[#f3f4f6] rounded-[60px] h-[45px] w-[340px]"
-        }`}
+          }`}
       >
         <div className="absolute right-[1rem]">
           {expanded && (
@@ -259,9 +257,8 @@ const TableItem = ({ data }: { data: any }) => {
                 {images.map((_, index) => (
                   <button
                     key={index}
-                    className={`w-2 h-2 rounded-full ${
-                      index === activeIndex ? "bg-[#fff]" : "bg-gray-300"
-                    }`}
+                    className={`w-2 h-2 rounded-full ${index === activeIndex ? "bg-[#fff]" : "bg-gray-300"
+                      }`}
                     onClick={() => handleDotClick(index)}
                   ></button>
                 ))}
@@ -299,7 +296,7 @@ const TableItem = ({ data }: { data: any }) => {
 
 const DamegeCasesTable = () => {
   const router = useRouter();
-  const [blacks, setBlack]= useState([]);
+  const [blacks, setBlack] = useState([]);
 
   const images = [
     "/images/damage-demo.png",
@@ -323,23 +320,23 @@ const DamegeCasesTable = () => {
   // GET /api/v1/mypage/blacks
   // This API displays a list of black consumers that you have registered.
   // The implementation should also include pagination.
-let pageNumber= 1;
-  const getBlacks= async ()=>{
+  let pageNumber = 1;
+  const getBlacks = async () => {
     const accessToken = localStorage.getItem('accessToken')
- const response = await customFetch.get(`api/v1/mypage/blacks?page=${pageNumber}`,{
-  headers:{
-    Authorization:`Bearer ${accessToken}`
-  }
- 
- } )
- setBlack(response.data)
-console.log("data",response.data)
+    const response = await customFetch.get(`api/v1/mypage/blacks?page=${pageNumber}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+
+    })
+    setBlack(response.data.data)
+    console.log("data", response.data.data)
 
   }
 
-useEffect(()=>{
- getBlacks()
-},[])
+  useEffect(() => {
+    getBlacks()
+  }, [])
 
   // below code,
   //   <TableCell className="px-3 text-xs text-center border whitespace-nowrap">
@@ -349,7 +346,9 @@ useEffect(()=>{
   //   </TableCell>
   // When clicked, it should navigate to the data page corresponding to this list, and the data values must be populated correctly.
   // Here, the data page is configured under damage-cases / [id].
-
+const hanldenavigation = (index:any)=>{
+  router.push(`damage-cases/${index + 1}`)
+}
   // This is a responsive project.
   // If you check the mobile size UI, you may notice that the UI changes differently.
   // Please check both desktop and mobile sizes while working on the API.
@@ -363,9 +362,8 @@ useEffect(()=>{
             {thRows.map((row, index) => (
               <TableHead
                 key={row.title}
-                className={`relative text-sm text-[#4B505D] font-normal text-center whitespace-nowrap ${
-                  index !== thRows.length - 1 ? "custom-border" : ""
-                }`}
+                className={`relative text-sm text-[#4B505D] font-normal text-center whitespace-nowrap ${index !== thRows.length - 1 ? "custom-border" : ""
+                  }`}
               >
                 {row.title}
               </TableHead>
@@ -373,14 +371,14 @@ useEffect(()=>{
           </TableRow>
         </TableHeader>
         <TableBody className="whitespace-nowrap">
-          {tableData.map((data, index) => (
+          {blacks && blacks.map((data: any, index: any) => (
             <TableRow className="text-sm text-abgray" key={index}>
               <TableCell className="px-3 text-center border whitespace-nowrap">
                 {String(index + 1).padStart(2, "0")}
               </TableCell>
               {/* createdAt */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
-                {data.registrationDateTime}
+                {data.createdAt}
               </TableCell>
               {/* name */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
@@ -388,26 +386,30 @@ useEffect(()=>{
               </TableCell>
               {/* phone */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
-                {data.phoneNumber}
+                {data.phone}
               </TableCell>
               {/* birth */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
-                {data.birthDate}
+                {data.birth}
               </TableCell>
               {/* damageDate */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
-                {data.DateOfDamage}
+                {data.damageDate}
               </TableCell>
               <TableCell className="px-3 text-xs text-center border whitespace-nowrap">
-                <button className="h-[25px] bg-abgray px-[15px] pt-1.5 pb-1 text-xs text-center text-white font-normal">
-                  <Link href="damage-cases/2">자세히 보기</Link>
+                <button onClick={()=>hanldenavigation(index)} className="h-[25px] bg-abgray px-[15px] pt-1.5 pb-1 text-xs text-center text-white font-normal">
+                자세히 보기
+                  {/* <Link href="damage-cases/">
+                 
+                  
+                 {\* </Link> */}
                 </button>
               </TableCell>
               {/* status */}
               <TableCell className="px-3 text-center border whitespace-nowrap">
                 <TBRSituation
                   className="pt-1 text-xs whitespace-nowrap"
-                  situation={data.situation}
+                  situation={data.status}
                 />
               </TableCell>
             </TableRow>
@@ -418,7 +420,7 @@ useEffect(()=>{
       {/* For small screen */}
 
       <main className="phone:hidden">
-        {tableData.map((data, index) => {
+        {blacks && blacks.map((data, index) => {
           return (
             <div key={index} className="flex flex-col">
               <TableItem data={data} />

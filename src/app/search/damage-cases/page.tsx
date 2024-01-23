@@ -15,11 +15,11 @@ import downArrowWhite from "../../../../public/icons/down-arrow-white.svg";
 import downArrowCustom from "../../../../public/icons/down-arrow.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import Link from "next/link";
-
+import useStore from '../../../lib/damageCaseStore';
 export default function Page() {
   const router = useRouter();
   const [buttonClicked, setButtonClicked] = useState(false);
-
+const {damages} = useStore()
   const handleButtonClick = () => {
     setButtonClicked(!buttonClicked);
   };
@@ -27,6 +27,7 @@ export default function Page() {
   const handleReport = () => {
     router.push("/file-objection");
   };
+console.log("damages",damages);
 
   return (
     <main className="min-h-screen">
@@ -250,12 +251,13 @@ export default function Page() {
             NNN 제목 & 키워드의 사례가 검색되었습니다
           </h3>
           <div className="mt-[45px] space-y-[53px]">
-            <DamageCaseItem />
-            <DamageCaseItem />
+            {  damages && damages[0]?.data.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }
+          
+            {/* <DamageCaseItem /> */}
           </div>
-          <Pagination />
+      {  damages.length >0 &&  <Pagination />}
         </div>
-        <div className="mt-[73px] flex flex-col items-center justify-center max-phone:mt-[28px]">
+      { damages.length == 0 && <div className="mt-[73px] flex flex-col items-center justify-center max-phone:mt-[28px]">
           <h2 className="font-normal text-[45px] text-accent max-phone:text-[28px] max-phone:text-dark">
             등록된 피해사례가 없습니다.
           </h2>
@@ -274,7 +276,7 @@ export default function Page() {
               />
             </button>
           </Link>
-        </div>
+        </div>}
       </section>
     </main>
   );

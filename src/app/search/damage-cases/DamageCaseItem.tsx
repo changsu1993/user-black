@@ -3,8 +3,10 @@ import { useState } from "react";
 import FileObjectionDialog from "@/components/dialogs/FileObjection";
 import ImageViewDialog from "@/components/dialogs/ImageView";
 import ImageViewDialogSmall from "@/components/dialogs/ImageViewSmallScreen";
-
-export default function DamageCaseItem() {
+interface PropType{
+  data:any
+}
+export default function DamageCaseItem({data}:PropType) {
   const images = [
     "/images/damage-case-full.png",
     "/images/damage-case.png",
@@ -32,7 +34,7 @@ export default function DamageCaseItem() {
           </p>
           <div className="bg-white px-5 max-phone:px-[10px] py-1 max-phone:py-[2px] max-phone:rounded-[5px] h-[42px] max-phone:h-[28px] flex items-center gap-[18px] max-phone:gap-[12px] ">
             <p className="text-dark33 text-base max-phone:text-[12px] leading-[21px] tracking-[-0.48px]">
-              2023 - 10- 24 (화)
+            {data.createdAt} (화)
             </p>
             <span className="w-4 h-4 border rounded-full border-accent group-even:bg-accent" />
           </div>
@@ -43,7 +45,7 @@ export default function DamageCaseItem() {
           </p>
           <div className="bg-white px-5 max-phone:px-[10px] py-1 max-phone:py-[2px] max-phone:rounded-[5px] h-[42px] max-phone:h-[28px]  flex items-center gap-[18px] max-phone:gap-[12px] ">
             <p className="text-dark33 text-base max-phone:text-[12px] leading-[21px] tracking-[-0.48px]">
-              2023 - 10- 24 (화)
+              {data.damageDate} (화)
             </p>
             <span className="w-4 h-4 border border-transparent rounded-full" />
           </div>
@@ -54,7 +56,10 @@ export default function DamageCaseItem() {
           </p>
           <div className="w-full bg-white px-5 py-[10px] max-phone:rounded-[5px]">
             <p className="text-dark33 text-sm max-phone:text-[12px] leading-[21px] tracking-[-0.48px]">
-              에어비앤비 숙소를 엉망으로 만든다, 계좌이체해주겠다고 하고
+            
+            {data.damageContent}
+            
+              {/* 에어비앤비 숙소를 엉망으로 만든다, 계좌이체해주겠다고 하고
               잠적한다 등의 악성 게스트
               <br />
               <br />
@@ -67,7 +72,7 @@ export default function DamageCaseItem() {
               사회 이슈에 대한 감정 및 지식을 함양하기위해 명사초청특강을
               준비하였습니다.
               <br />
-              많은 관심과 참여 부탁드립니다.
+              많은 관심과 참여 부탁드립니다. */}
             </p>
           </div>
         </div>
@@ -78,11 +83,9 @@ export default function DamageCaseItem() {
 
           {/* For large screen */}
           <div className="flex flex-col flex-wrap items-center w-full gap-5 max-phone:hidden md:flex-row md:gap-7">
-            <ImageViewDialog />
-            <ImageViewDialog />
-            <ImageViewDialog />
-            <ImageViewDialog />
-            <ImageViewDialog />
+           {data.imagePaths.map((path:any,index:any) => <ImageViewDialog key={index}/> ) }
+           
+           
           </div>
 
           {/* For small screen */}

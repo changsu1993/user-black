@@ -89,7 +89,7 @@ export default function LoginDialog({
       );
 
       if (response.data) {
-        localStorage.setItem("accessToken", response.data.accessToken);
+       localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Login Success", {
           autoClose: 3000,
         });

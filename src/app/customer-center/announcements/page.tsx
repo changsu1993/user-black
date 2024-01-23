@@ -90,7 +90,7 @@ console.log({filteredObjects});
   // For more details, please refer to the Swagger documentation."
   //const [] = uses
   const getNotices = async () => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken =localStorage.getItem('accessToken');
     customFetch.get('api/v1/post/notices', {
       headers: {
         Authorization: `Bearer ${accessToken}`

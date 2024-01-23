@@ -75,7 +75,7 @@ export default function DamageCaseForm({
       blackData.damageContent &&
       blackData.damageTypeId ){
         try {
-          const accessToken = localStorage.getItem('accessToken')
+          const accessToken =localStorage.getItem('accessToken')
           const response = await customFetch.post('api/v1/blacks',
             data
             , {
@@ -139,7 +139,7 @@ export default function DamageCaseForm({
 
   }, [])
   const getOptions = () => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken =localStorage.getItem('accessToken')
     try {
       customFetch.get('/api/v1/blacks/damagetypes', {
         headers: {
