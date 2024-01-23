@@ -17,10 +17,22 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+
+ interface tableDataTypes{
+  authorName:string,
+  title:string,
+  content:string,
+  STATUS:string,
+
+ }
+
   const router = useRouter();
-  const [tableData, setTableData] = useState();
+  const [tableData, setTableData] = useState<tableDataTypes[]>([]);
+  const [sorted, setSorted] = useState()
   const handleSearchClick = () => {
-    router.push("/customer-center/faqs");
+
+    router.push("/customer-center/faqs"); 
+
   };
 
   const handleInquiry = () => {
@@ -30,7 +42,13 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
-
+const handleSearch = (searchText:string)=>{
+  const filteredData = tableData.filter(item =>
+    item.title?.toLowerCase().includes(searchText.toLowerCase())
+  );
+  setTableData(filteredData)
+     
+}
   // faysel1:
   // GET /api/v1/post/notices
   // This API is used for retrieving a list of announcements.
@@ -117,6 +135,7 @@ export default function Page() {
             >
               <input
                 type="text"
+                onChange={(e)=>handleSearch(e.target.value)}
                 className={cn(
                   "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
                   "text-[25px] font-normal leading-[33px] tracking-[-0.75px] max-phone:w-[16rem] max-phone:text-[16px]"

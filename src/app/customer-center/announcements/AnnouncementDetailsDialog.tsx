@@ -12,10 +12,14 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+interface TYpes{
+  data:any,
+  index:number
+}
 
-export default function AnnouncementDetailsDialog(data:any) {
+export default function AnnouncementDetailsDialog({data, index}:TYpes) {
   const form = useForm();
-console.log(data, "pa22")
+console.log(data, "pa22", index)
   return (
     <Dialog>
       <DialogTrigger asChild>

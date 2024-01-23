@@ -172,7 +172,7 @@ console.log("data is :",data["data"]);
               </TableCell>
               {/* detail modal */}
               <TableCell className="border px-3 pl-[32px] pr-[33px] text-xs text-center whitespace-nowrap">
-                <AnnouncementDetailsDialog data={data} />
+                <AnnouncementDetailsDialog data={data} index={index} />
               </TableCell>
               {/* createdAt */}
               <TableCell className="border px-3 pl-[51px] pr-[49px] text-sm text-center font-normal whitespace-nowrap">
