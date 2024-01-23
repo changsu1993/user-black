@@ -7,12 +7,57 @@ import { Label } from "@/components/ui/label";
 import customFetch from "@/lib/customfetch";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Router  from "next/router";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Home() {
-  const router = useRouter();
-  const handleSearchClick = () => {
-    router.push("/search/damage-cases");
+  // const router = useRouter();
+ 
+
+  const [searchData, setSearchData] = useState({
+     name:"",
+     phone:"",
+     birth:""
+  })
+
+  const handleSearchClick = async () => {
+    if(searchData.name && searchData.phone && searchData.birth){
+
+
+      const encodedFormData = Object.fromEntries(
+        Object.entries(searchData).map(([key, value]) => [key, encodeURIComponent(value)])
+      );
+
+    const queryParams = new URLSearchParams(encodedFormData);
+
+
+try {
+  const response =  await customFetch.get(`api/v1/blacks/search?${queryParams.toString()}`)
+  if(response){
+    toast.success("done")
+    
+    Router.push({
+      pathname:'/search/damage-cases',
+      
+    })
+   // router.replace("");
+} 
+
+ 
+;
+}catch (error:any) {
+  console.log(error.response.data.message);
+  
+  toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
+}
+ }
+  
+else{
+      toast.error("please fill all the fields")
+    }
+  
+ 
   };
 
   // faysel1:
@@ -24,6 +69,11 @@ const createSearchCount = async ()=>{
 const response = await customFetch.get('api/v1/create-search-count',)
 }
 
+const handleChange = (event: any) => {
+  const { name, value } = event.target
+
+  setSearchData({ ...searchData, [name]: value })
+}
 
   // GET /api/v1/blacks/search
   // This API is used for searching a black consumer's name, mobile phone number, and date of birth.
@@ -98,6 +148,9 @@ const response = await customFetch.get('api/v1/create-search-count',)
                 이름
               </Label>
               <Input
+              name="name"
+              value={searchData.name}
+              onChange={handleChange}
                 type="text"
                 className="flex-1 md:text-[20px] max-phone:rounded-[10px] max-phone:text-[16px]"
                 placeholder="블랙컨슈머 이름을 입력해주세요"
@@ -113,6 +166,9 @@ const response = await customFetch.get('api/v1/create-search-count',)
                 휴대폰번호
               </Label>
               <Input
+              name="phone"
+              value={searchData.phone}
+              onChange={handleChange}
                 type="text"
                 className="flex-1 md:text-[20px] max-phone:rounded-[10px] max-phone:text-[16px]"
                 placeholder="- (하이픈) 제거 후 입력해주세요"
@@ -128,6 +184,9 @@ const response = await customFetch.get('api/v1/create-search-count',)
                 생년월일
               </Label>
               <Input
+                name="birth"
+                value={searchData.birth}
+                onChange={handleChange}
                 type="text"
                 className="flex-1 md:text-[20px] max-phone:rounded-[10px] max-phone:text-[16px]"
                 placeholder="생년월일 6자리를 입력해주세요 (예 : 841225)"
@@ -141,9 +200,9 @@ const response = await customFetch.get('api/v1/create-search-count',)
             className="w-full mt-[61px] max-phone:bg-[#141414] max-phone:h-[65px]"
             asChild
           >
-            <Link href="/search/damage-cases" className="max-phone:text-[18px]">
+          <Button onClick={handleSearchClick} className="max-phone:text-[18px]">
               검색하기
-            </Link>
+           </Button>
           </Button>
 
           <p

@@ -34,7 +34,7 @@ export default function Page() {
   const router = useRouter();
   const [tableData, setTableData] = useState<TableDataTypes[]>([]);
   const [sorted, setSorted] = useState()
-  const [searchTerm, setSearchTerm] = useState('')
+  const [filterdData, setFilteredData] = useState<TableDataTypes[]>([]);
   const handleSearchClick = () => {
 
     router.push("/customer-center/faqs"); 
@@ -50,18 +50,15 @@ export default function Page() {
   };
   const handleSearch = (searchText: string) => {
     console.log('Search Text:', searchText);
-  const filteredObjects =   tableData.filter(post => {
-      if (searchText === "") {
-        //if query is empty
-        return post;
-      } else if (post.title.toLowerCase().includes(searchText.toLowerCase())) {
-        //returns filtered array
-        return post;
-      }
-    });
 
-  setTableData(filteredObjects)
-  };
+  const filteredObjects =   filterdData.filter((post:any) => {
+      return !searchText || post.title.toLowerCase().includes(searchText.toLowerCase())
+    });
+console.log({filteredObjects});
+
+  setFilteredData(filteredObjects)
+  setFilteredData(searchText ? filteredObjects : tableData);
+  };;
   
 
   const sortByLatest = () => {
@@ -102,7 +99,8 @@ export default function Page() {
       
       
       setTableData(res.data.data)
-    console.log(res.data.data)
+      setFilteredData(res.data.data)
+ 
     
     }).catch((error: any) => {
       toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
@@ -244,7 +242,7 @@ export default function Page() {
 
         {/* Search Header End */}
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable data={tableData} />
+          <AnnouncementsTable data={filterdData} />
         </div>
       </section>
     </main>

@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 export default function Page() {
   const router = useRouter();
   const [faqData, setFaqData]= useState<any>([])
+  const [filteredData, setFilteredData] = useState<any>([])
   const handleNoticeClick = () => {
     router.push("/customer-center/announcements");
   };
@@ -29,7 +30,17 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
+  const handleSearch = (searchText: string) => {
+  
 
+  const filteredObjects =   filteredData.filter((post:any) => {
+      return !searchText || post.title.toLowerCase().includes(searchText.toLowerCase())
+    });
+
+
+  setFilteredData(filteredObjects)
+  setFilteredData(searchText ? filteredObjects : faqData);
+  };
 ///  GET api/v1/post/faqs   
 const accessToken = localStorage.getItem("accessToken")
 const getNotices = async () => {
@@ -42,6 +53,7 @@ const getNotices = async () => {
     
     
      setFaqData(res.data.data)
+     setFilteredData(res.data.data)
   console.log(res.data.data)
   
   }).catch((error: any) => {
@@ -157,6 +169,7 @@ useEffect(() => {
               )}
             >
               <input
+onChange={(e)=>handleSearch(e.target.value)}
                 type="text"
                 className={cn(
                   "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
@@ -240,7 +253,7 @@ useEffect(() => {
         />
 
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
-          <AnnouncementsTable data={faqData} /> 
+          <AnnouncementsTable data={filteredData} /> 
         </div>
       </section>
     </main>
