@@ -11,6 +11,8 @@ import AnnouncementsTable from "./FAQsTable";
 import back from "../../../../public/icons/small-back.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import separator from "../../../../public/icons/separator.svg";
+import customFetch from "@/lib/customfetch";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
@@ -27,7 +29,21 @@ export default function Page() {
   };
 
 ///  GET api/v1/post/faqs   
+const accessToken = localStorage.getItem("accessToken")
+ const getFaqs = ()=>{
+  let pageNUmber= 1;
+customFetch.get(`api/v1/post/faqs?page=${pageNUmber}&title=faq`,{
+headers:{
+  Authorization:`Bearer ${accessToken}`
+}
+},
+).then(e=>console.log(e)).catch(e=>e.message)
+ }
 
+useEffect(()=>{
+
+getFaqs()
+},[])
 
   return (
     <main>

@@ -18,17 +18,23 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
 
- interface tableDataTypes{
-  authorName:string,
-  title:string,
-  content:string,
-  STATUS:string,
-
- }
+ interface TableDataTypes {
+  authorName: string;
+  id: number;
+  title: string;
+  content: string;
+  status: string; // Assuming "STATUS" is a typo and you meant "status"
+  startDateTime: string;
+  endDateTime: string;
+  clickCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
   const router = useRouter();
-  const [tableData, setTableData] = useState<tableDataTypes[]>([]);
+  const [tableData, setTableData] = useState<TableDataTypes[]>([]);
   const [sorted, setSorted] = useState()
+  const [searchTerm, setSearchTerm] = useState('')
   const handleSearchClick = () => {
 
     router.push("/customer-center/faqs"); 
@@ -42,13 +48,39 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
-const handleSearch = (searchText:string)=>{
-  const filteredData = tableData.filter(item =>
-    item.title?.toLowerCase().includes(searchText.toLowerCase())
-  );
-  setTableData(filteredData)
-     
-}
+  const handleSearch = (searchText: string) => {
+    console.log('Search Text:', searchText);
+  const filteredObjects =   tableData.filter(post => {
+      if (searchText === "") {
+        //if query is empty
+        return post;
+      } else if (post.title.toLowerCase().includes(searchText.toLowerCase())) {
+        //returns filtered array
+        return post;
+      }
+    });
+
+  setTableData(filteredObjects)
+  };
+  
+
+  const sortByLatest = () => {
+    const sortedData = tableData.slice().sort((a, b) => {
+      const titleA = a.title.toLowerCase();
+      const titleB = b.title.toLowerCase();
+  
+      if (titleA < titleB) {
+        return 1; // If titleA is alphabetically smaller, move it down in the array
+      } else if (titleA > titleB) {
+        return -1; // If titleA is alphabetically larger, move it up in the array
+      }
+  
+      return 0; // If titles are equal, maintain the order
+    });
+  
+    setTableData(sortedData);
+  };
+  
   // faysel1:
   // GET /api/v1/post/notices
   // This API is used for retrieving a list of announcements.
@@ -66,14 +98,20 @@ const handleSearch = (searchText:string)=>{
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
-    }).then((res) => setTableData(res.data.data)).catch((error: any) => {
+    }).then((res) =>{ 
+      
+      
+      setTableData(res.data.data)
+    console.log(res.data.data)
+    
+    }).catch((error: any) => {
       toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
     })
   }
 
   useEffect(() => {
     getNotices()
-
+   sortByLatest()
   }, [])
   return (
     <main>
@@ -180,7 +218,7 @@ const handleSearch = (searchText:string)=>{
 
             <SelectInput
               onChange={(e: any) => {
-                console.log(e.value)
+                sortByLatest()
               }}
               className="pl-5 pr-3 text-[25px] font-normal max-sm2:pl-[10px] max-sm2:pr-[10px] max-sm2:gap-1 max-sm2:h-[40px]"
               placeholder="최신순"
