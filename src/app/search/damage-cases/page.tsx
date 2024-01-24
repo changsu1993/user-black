@@ -27,7 +27,7 @@ const {damages} = useStore()
   const handleReport = () => {
     router.push("/file-objection");
   };
-console.log("damages",damages);
+//console.log("damages",damages);
 
   return (
     <main className="min-h-screen">

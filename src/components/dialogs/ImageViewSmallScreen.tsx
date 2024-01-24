@@ -42,12 +42,12 @@ export default function ImageViewDialogSmall({
       setCurImage(curImage + 1);
     }
   };
-
+const url = ' http://3.35.139.125:3000';
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Image
-          src={passedImage}
+          src={`${url}${passedImage}`}
           width={242}
           height={237}
           alt=""

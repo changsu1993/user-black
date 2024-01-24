@@ -91,12 +91,16 @@ export default function DamageCaseItem({data}:PropType) {
           {/* For small screen */}
 
           <div className="relative flex flex-col flex-wrap items-center w-full gap-5 phone:hidden md:flex-row md:gap-7">
-            <ImageViewDialogSmall
-              passedImage={images[activeIndex]}
+     
+     {           data.imagePaths.map((path:any,index:any) =>   <ImageViewDialogSmall
+     key={index}
+              passedImage={path}
               active={true}
-            />
+            /> ) 
+           }
+          
             <div className=" flex gap-2 mt-0 absolute bottom-[7px] left-[50%] transform translate-x-[-50%] z-[999]">
-              {images.map((_, index) => (
+              {data.imagePaths.map((_:any, index:any) => (
                 <button
                   key={index}
                   className={`w-2 h-2 rounded-full ${

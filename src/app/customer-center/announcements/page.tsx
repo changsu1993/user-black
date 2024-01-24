@@ -41,7 +41,7 @@ export default function Page() {
   const [totalPages, setTotalPages] = useState(1);
   const [filterdData, setFilteredData] = useState<TableDataTypes[]>([]);
   const handleSearchClick = () => {
-
+0
     router.push("/customer-center/faqs"); 
 
   };
@@ -108,6 +108,7 @@ console.log({filteredObjects});
       }
     }).then((res:any) =>{ 
       setLoading(false)
+  console.log(res.data);
       
       setTableData(res.data.data)
       setFilteredData(res.data.data)
@@ -119,11 +120,35 @@ console.log({filteredObjects});
       toast.error(error.response?.data.message.isArray ? error.response?.data.message[0] : error.response?.data.message)
     })
   }
-
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    for (let i = 0; i < totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={cn(
+            "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+            i + 1 === currentPage
+              ? "text-5dgray text-xs bg-f6gray leading-[11px]"
+              : "text-a1gray text-xs leading-[11px]"
+          )}
+        >
+          {i + 1}
+        </button>
+      );
+     } 
+    
+    
+    return buttons.length > 0 ? buttons : null; 
+    }
   const handlePageChange = (newPage:number) => {
     setCurrentPage(newPage);
   };
+  useEffect(() => {
+    getNotices()
 
+  }, [])
   useEffect(() => {
     getNotices()
 
@@ -268,7 +293,7 @@ console.log({filteredObjects});
 :<AnnouncementsTable data={filterdData} />
        }
         </div>
-        <div  className="  flex justify-center">
+   {   totalPages>1?  <div  className="  flex justify-center">
         <div className="mt-[139px] max-phone:mt-[60px] flex items-center justify-center gap-3">
       <button
         className={cn(
@@ -286,32 +311,9 @@ console.log({filteredObjects});
       >
         <ChevronLeftIcon className="w-4 h-4" />
       </button>
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-white text-xs bg-abgray leading-[11px]"
-        )}
-      >
-        1
-      </button>
-      <button
-
-onClick={()=>setCurrentPage(currentPage+1)}
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-5dgray text-xs bg-f6gray leading-[11px]"
-        )}
-      >
-        2
-      </button>
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-5dgray text-xs bg-f6gray leading-[11px]"
-        )}
-      >
-        3
-      </button>
+ 
+ {totalPages> 1 && renderPaginationButtons()}
+ <p>pooooooooooooos</p>
       <button
         className={cn(
           "w-[22px] h-[22px] flex items-center justify-center rounded-full",
@@ -329,7 +331,7 @@ onClick={()=>setCurrentPage(currentPage+1)}
         <DoubleArrowRightIcon className="w-4 h-4" />
       </button>
     </div>
-      </div>
+      </div>:null}
       </section>
     </main>
   );

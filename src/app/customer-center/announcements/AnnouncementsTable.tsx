@@ -191,7 +191,7 @@ console.log("data is :",data["data"]);
               <div className="flex justify-between mb-[7px]">
                 {/* id */}
                 <p className="text-[#acacac] text-[12px] tracking-[-0.36px]">
-                  {index + 1 > 9 ? index : `0${index + 1}`}
+                  {item.id }
                 </p>
                 {/* createdAt */}
                 <p className="text-[#acacac] text-[12px] tracking-[-0.36px]">

@@ -143,7 +143,7 @@ export default function AnnouncementsTable({ data }: { data: any[] }) {
           {data && data.map((data:any, index:any) => (
             <TableRow className="text-abgray" key={index}>
               <TableCell className="text-sm border pl-[44px] pr-[40px] text-center whitespace-nowrap">
-                {String(index + 1).padStart(2, "0")}
+                {data.id}
               </TableCell>
               <TableCell className="text-sm border pl-[36px] pr-[33px] text-center whitespace-nowrap">
                 {data.content}
@@ -167,10 +167,10 @@ export default function AnnouncementsTable({ data }: { data: any[] }) {
               <div className="flex justify-between mb-[7px]">
                 <div className="flex gap-[8px]">
                   <p className="text-[#acacac] text-[12px] tracking-[-0.36px]">
-                    {index + 1 > 9 ? index : `0${index + 1}`}
+                    {item.content}
                   </p>
                   <p className="w-[46px] h-[16px] rounded-[40px] bg-[#acacac] text-[8px] text-[#fff] tracking-[-0.24px] flex items-center justify-center font-light">
-                    {item.category}
+                    {item.title}
                   </p>
                 </div>
               </div>

@@ -36,7 +36,7 @@ try {
   const response =  await customFetch.get(`api/v1/blacks/search?${queryParams.toString()}`)
   if(response){
     addDamage(response.data)
-    toast.success("done")
+    toast.success("찾은 결과")
     console.log(response.data);
     
    router.push(
