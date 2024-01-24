@@ -322,7 +322,9 @@ const DamegeCasesTable = () => {
   // The implementation should also include pagination.
   let pageNumber = 1;
   const getBlacks = async () => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
     const response = await customFetch.get(`api/v1/mypage/blacks?page=${pageNumber}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`

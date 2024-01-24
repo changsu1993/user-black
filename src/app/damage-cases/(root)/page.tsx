@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DamegeCasesTable from "./DamegeCasesTable";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import back from "../../../../public/icons/back.svg";
 
 const DamegeCases = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true)
+
   const handleInfo = () => {
     router.push("/my-page/info");
   };
@@ -19,6 +19,7 @@ const DamegeCases = () => {
   const handleGoBack = () => {
     router.back();
   };
+
 
   return (
     <main>
@@ -85,9 +86,10 @@ const DamegeCases = () => {
           {/* Table section */}
 
 
-{}          <div className="mt-[54px]">
-            <DamegeCasesTable />
-          </div>
+
+          <div className="mt-[54px]">
+                <DamegeCasesTable />
+</div>
         </div>
       </section>
     </main>

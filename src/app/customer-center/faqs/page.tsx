@@ -42,9 +42,13 @@ export default function Page() {
   setFilteredData(searchText ? filteredObjects : faqData);
   };
 ///  GET api/v1/post/faqs   
-const accessToken =localStorage.getItem("accessToken")
+const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
 const getNotices = async () => {
-  const accessToken =localStorage.getItem('accessToken');
+  const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null;
   customFetch.get('api/v1/post/faqs?page=1&title=faq', {
     headers: {
       Authorization: `Bearer ${accessToken}`

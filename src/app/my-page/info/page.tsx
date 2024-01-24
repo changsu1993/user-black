@@ -29,10 +29,9 @@ export default function Page() {
     loginId: "",
     password: "",
     confPassword: "",
-
- 
-
   })
+
+  
   const handleChange = (event: any) => {
     const { name, value } = event.target
 
@@ -55,13 +54,18 @@ export default function Page() {
   // faysel1:
   // GET /api/v1/admins/post/notices
   // This API is used to retrieve your personal information.
-  const accessToken =localStorage.getItem('accessToken')
+  const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
   const getMypage = async ()=>{
      customFetch.get('api/v1/mypage/info',{
       headers:{
         Authorization:`Bearer ${accessToken}`
       }
-     }).then((res)=>setUserData({...userData, loginId:res.data.loginId}) ).catch((e)=>toast.error(e.message))
+     }).then((res)=>{setUserData({...userData, loginId:res.data.loginId})
+    
+    
+    } ).catch((e)=>toast.error(e.message))
   }
   
   // PATCH /api/v1/mypage/info
@@ -80,7 +84,9 @@ export default function Page() {
         content:"Password MisMatch" ,
       })
     }
-    const accessToken =localStorage.getItem('accessToken');
+    const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null;
     const data = JSON.stringify({
       password:userData.password, name:userData.name, email:userData.email,
     });

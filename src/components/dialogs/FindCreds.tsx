@@ -128,7 +128,9 @@ function FindIdForm() {
 // Example usage:
 ;
     if (credData.name && credData.email && emailRegex.test(credData.email)) {
-      const accessToken =localStorage.getItem('accessToken')
+      const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
       let config = {
     
         headers: {
@@ -279,7 +281,9 @@ function FindPasswordForm() {
         "name": credData.name,
         "email": credData.email
       }
-      const accessToken =localStorage.getItem('accessToken')
+      const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
       console.log(data)
         ;
 

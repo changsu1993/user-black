@@ -141,7 +141,7 @@ interface PropType{
 export default function AnnouncementsTable(data:PropType) {
   const router = useRouter();
   const [datas, setData] = useState({ data: [] });
-// console.log("data is :",data["data"]);
+console.log("data is :",data["data"]);
   return (
     <>
       <Table className="max-phone:hidden">
@@ -164,7 +164,7 @@ export default function AnnouncementsTable(data:PropType) {
             <TableRow className="text-abgray" key={index}>
               {/* id */}
               <TableCell className="border pl-[44px] pr-[41px] text-sm text-center whitespace-nowrap">
-                {String(index + 1).padStart(2, "0")}
+                {data.id}
               </TableCell>
               {/* title */}
               <TableCell className="max-w-[700px] border pl-[37px] text-sm w-max truncate whitespace-nowrap">
@@ -205,6 +205,7 @@ export default function AnnouncementsTable(data:PropType) {
             </div>
           );
         })}
+        
       </section>
 
     

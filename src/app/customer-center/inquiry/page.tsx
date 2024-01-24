@@ -53,7 +53,9 @@ setInquiryData({...InquiryData, [name]:value})
   // Please check both desktop and mobile sizes while working on the API.
   // For more details, please refer to the Swagger documentation."
   const sendInquiry = async()=>{
-    const accessToken =localStorage.getItem('accessToken')
+    const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null
     
     let data = JSON.stringify({
   title:InquiryData.title,

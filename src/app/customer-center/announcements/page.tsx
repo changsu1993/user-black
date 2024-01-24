@@ -12,10 +12,11 @@ import back from "../../../../public/icons/small-back.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import separator from "../../../../public/icons/separator.svg";
 import customFetch from "@/lib/customfetch";
-import { error } from "console";
+import { error, log } from "console";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
+import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from "@radix-ui/react-icons";
 
 export default function Page() {
 
@@ -52,8 +53,12 @@ export default function Page() {
   const handleGoBack = () => {
     router.back();
   };
+
+  
+  
+
   const handleSearch = (searchText: string) => {
-    console.log('Search Text:', searchText);
+ //   console.log('Search Text:', searchText);
 
   const filteredObjects =   filterdData.filter((post:any) => {
       return !searchText || post.title.toLowerCase().includes(searchText.toLowerCase())
@@ -94,7 +99,9 @@ console.log({filteredObjects});
   // For more details, please refer to the Swagger documentation."
   //const [] = uses
   const getNotices = async () => {
-    const accessToken =localStorage.getItem('accessToken');
+    const accessToken =typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.getItem('accessToken'):null;
     customFetch.get(`api/v1/post/notices?page=${currentPage}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -106,6 +113,7 @@ console.log({filteredObjects});
       setFilteredData(res.data.data)
       setTotalPages(res.meta.last_page);
       
+  
     
     }).catch((error: any) => {
       toast.error(error.response?.data.message.isArray ? error.response?.data.message[0] : error.response?.data.message)
@@ -225,6 +233,8 @@ console.log({filteredObjects});
 
             <SelectInput
               onChange={(e: any) => {
+            e.label ==="번호순"? sortByLatest():null
+            //   console.log(e.label);
                
               }}
               className="pl-5 pr-3 text-[25px] font-normal max-sm2:pl-[10px] max-sm2:pr-[10px] max-sm2:gap-1 max-sm2:h-[40px]"
@@ -258,8 +268,67 @@ console.log({filteredObjects});
 :<AnnouncementsTable data={filterdData} />
        }
         </div>
-        <div className="  flex justify-center">
-        <Pagination />
+        <div  className="  flex justify-center">
+        <div className="mt-[139px] max-phone:mt-[60px] flex items-center justify-center gap-3">
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-a1gray text-xs leading-[11px]"
+        )}
+      >
+        <DoubleArrowLeftIcon className="w-4 h-4" />
+      </button>
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-a1gray text-xs leading-[11px]"
+        )}
+      >
+        <ChevronLeftIcon className="w-4 h-4" />
+      </button>
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-white text-xs bg-abgray leading-[11px]"
+        )}
+      >
+        1
+      </button>
+      <button
+
+onClick={()=>setCurrentPage(currentPage+1)}
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-5dgray text-xs bg-f6gray leading-[11px]"
+        )}
+      >
+        2
+      </button>
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-5dgray text-xs bg-f6gray leading-[11px]"
+        )}
+      >
+        3
+      </button>
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-a1gray text-xs leading-[11px]"
+        )}
+      >
+        <ChevronRightIcon className="w-4 h-4" />
+      </button>
+      <button
+        className={cn(
+          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
+          "text-a1gray text-xs leading-[11px]"
+        )}
+      >
+        <DoubleArrowRightIcon className="w-4 h-4" />
+      </button>
+    </div>
       </div>
       </section>
     </main>

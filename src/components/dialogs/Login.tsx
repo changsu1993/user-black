@@ -89,7 +89,9 @@ export default function LoginDialog({
       );
 
       if (response.data) {
-       localStorage.setItem("accessToken", response.data.accessToken);
+       typeof window !== 'undefined' && window.localStorage?
+  // Use localStorage here
+  localStorage.setItem("accessToken", response.data.accessToken):null;
         toast.success("Login Success", {
           autoClose: 3000,
         });
