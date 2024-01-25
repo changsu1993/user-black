@@ -7,11 +7,16 @@ interface Damage {
 
 interface Store {
     damages: any[];
+    query:"",
     addDamage: (damage: Damage) => void;
+    setQuery: (query:any) => void;
   }
 
 const useStore = create<Store>((set) => ({
     damages: [],
+    query:"",
+  
+    setQuery: (query) => set((state) => ({ query })),
     addDamage: (damage) => set((state) => ({ damages: [...state.damages, damage] })),
   }));
   

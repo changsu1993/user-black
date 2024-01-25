@@ -141,7 +141,7 @@ interface PropType{
 export default function AnnouncementsTable(data:PropType) {
   const router = useRouter();
   const [datas, setData] = useState({ data: [] });
-console.log("data is :",data["data"]);
+console.log("data is :",data);
   return (
     <>
       <Table className="max-phone:hidden">

@@ -20,7 +20,7 @@ export default function ImageViewDialog({
   const [curImage, setCurImage] = useState<number>(0);
   const [open, setOpen] = useState(false);
   console.log("paths" ,paths);
-  let url =' http://3.35.139.125:3000'
+  let url ='http://3.35.139.125:3000'
 console.log("img path",`${url}/${paths}`);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ console.log("img path",`${url}/${paths}`);
           </button>
           <div className="flex-1 w-full">
             <Image
-              src={imagesArray[curImage]}
+              src={`${url}${paths}`}
               width={654}
               height={641}
               alt=""

@@ -69,44 +69,50 @@ export default function LoginDialog({
   const handleGoBack = () => {
     router.back();
   };
-  const handleLogin = async (values: any) => {
+  const handleLogin = async () => {
 
     const { loginId, password } = loginData;
     const credentials = `${loginId}:${password}`;
-    console.log(credentials);
+    //console.log(credentials);
     const encodedCredentials = btoa(credentials);
-     console.log(encodedCredentials);
-
-    try {
-      const response = await customFetch.post(
-        "/api/v1/auth/users/login",
-        {},
-        {
-          headers: {
-            Authorization: `Basic ${encodedCredentials}`,
-          },
-        }
-      );
-
-      if (response.data) {
-       typeof window !== 'undefined' && window.localStorage?
-  // Use localStorage here
-  localStorage.setItem("accessToken", response.data.accessToken):null;
-        toast.success("Login Success", {
-          autoClose: 3000,
-        });
-        onOpenChange?.(false);
-        setLoginData({loginId:"", password:""})
+    // console.log(encodedCredentials);
+if(loginId && password){
+  try {
+    const response = await customFetch.post(
+      "/api/v1/auth/users/login",
+      {},
+      {
+        headers: {
+          Authorization: `Basic ${encodedCredentials}`,
+        },
       }
+    );
 
-    
-    } catch (error: any) {
-      console.log(error);
-
-      toast.error(error.response.data.message, {
+    if (response.data) {
+     typeof window !== 'undefined' && window.localStorage?
+// Use localStorage here
+localStorage.setItem("accessToken", response.data.accessToken):null;
+      toast.success("Login Success", {
         autoClose: 3000,
       });
+      onOpenChange?.(false);
+      setLoginData({loginId:"", password:""})
     }
+
+  
+  } catch (error: any) {
+    console.log(error);
+
+    toast.error(error.response.data.message, {
+      autoClose: 3000,
+    });
+  }
+}else{
+ 
+
+  toast.error("모든 필드를 작성하십시오")
+}
+    
   };
   
 

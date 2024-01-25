@@ -183,9 +183,7 @@ export default function AnnouncementsTable({ data }: { data: any[] }) {
         })}
       </section>
 
-      <div className="  flex justify-center">
-        <Pagination />
-      </div>
+     
     </>
   );
 }

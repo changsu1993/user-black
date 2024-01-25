@@ -69,7 +69,7 @@ const url = ' http://3.35.139.125:3000';
         <div className="w-full  flex max-md:flex-col items-center justify-center max-md:gap-[10px] gap-[108px] relative">
           <div className="flex-1 w-full">
             <Image
-              src={imagesArray[curImage]}
+                src={`${url}${passedImage}`}
               width={654}
               height={641}
               alt=""

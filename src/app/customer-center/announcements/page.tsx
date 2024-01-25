@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SelectInput } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import AnnouncementsTable from "./AnnouncementsTable";
-
+import { Pagination } from 'flowbite-react';
 import back from "../../../../public/icons/small-back.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import separator from "../../../../public/icons/separator.svg";
@@ -15,7 +15,7 @@ import customFetch from "@/lib/customfetch";
 import { error, log } from "console";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import Pagination from "@/components/Pagination";
+
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from "@radix-ui/react-icons";
 
 export default function Page() {
@@ -56,16 +56,19 @@ export default function Page() {
 
   
   
+const onPageChange = (page:number)=>setCurrentPage(page)
 
   const handleSearch = (searchText: string) => {
- //   console.log('Search Text:', searchText);
+
+
+    //   console.log('Search Text:', searchText);
 
   const filteredObjects =   filterdData.filter((post:any) => {
       return !searchText || post.title.toLowerCase().includes(searchText.toLowerCase())
     });
 console.log({filteredObjects});
 
-  setFilteredData(filteredObjects)
+
   setFilteredData(searchText ? filteredObjects : tableData);
   };;
   
@@ -102,57 +105,41 @@ console.log({filteredObjects});
     const accessToken =typeof window !== 'undefined' && window.localStorage?
   // Use localStorage here
   localStorage.getItem('accessToken'):null;
-    customFetch.get(`api/v1/post/notices?page=${currentPage}`, {
+  const response = await  customFetch.get(`api/v1/post/notices?page=${currentPage}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
-    }).then((res:any) =>{ 
+    })
+    
+    .then((res) =>{ 
       setLoading(false)
-  console.log(res.data);
+      setLoading(false)
+      
+      setTotalPages(res.data.meta.last_page)
+      console.log(res.data.meta.total,res.data.meta.last_page );
+      
+ 
       
       setTableData(res.data.data)
       setFilteredData(res.data.data)
-      setTotalPages(res.meta.last_page);
+   
       
   
-    
+    return res;
     }).catch((error: any) => {
       toast.error(error.response?.data.message.isArray ? error.response?.data.message[0] : error.response?.data.message)
     })
+    
   }
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    for (let i = 0; i < totalPages; i++) {
-      buttons.push(
-        <button
-          key={i}
-          onClick={() => setCurrentPage(i + 1)}
-          className={cn(
-            "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-            i + 1 === currentPage
-              ? "text-5dgray text-xs bg-f6gray leading-[11px]"
-              : "text-a1gray text-xs leading-[11px]"
-          )}
-        >
-          {i + 1}
-        </button>
-      );
-     } 
-    
-    
-    return buttons.length > 0 ? buttons : null; 
-    }
-  const handlePageChange = (newPage:number) => {
-    setCurrentPage(newPage);
-  };
-  useEffect(() => {
-    getNotices()
 
-  }, [])
   useEffect(() => {
     getNotices()
 
   }, [currentPage])
+  useEffect(() => {
+    getNotices()
+
+  }, [])
   return (
     <main>
       <section
@@ -292,46 +279,9 @@ console.log({filteredObjects});
 </div>
 :<AnnouncementsTable data={filterdData} />
        }
-        </div>
-   {   totalPages>1?  <div  className="  flex justify-center">
-        <div className="mt-[139px] max-phone:mt-[60px] flex items-center justify-center gap-3">
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-a1gray text-xs leading-[11px]"
-        )}
-      >
-        <DoubleArrowLeftIcon className="w-4 h-4" />
-      </button>
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-a1gray text-xs leading-[11px]"
-        )}
-      >
-        <ChevronLeftIcon className="w-4 h-4" />
-      </button>
- 
- {totalPages> 1 && renderPaginationButtons()}
- <p>pooooooooooooos</p>
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-a1gray text-xs leading-[11px]"
-        )}
-      >
-        <ChevronRightIcon className="w-4 h-4" />
-      </button>
-      <button
-        className={cn(
-          "w-[22px] h-[22px] flex items-center justify-center rounded-full",
-          "text-a1gray text-xs leading-[11px]"
-        )}
-      >
-        <DoubleArrowRightIcon className="w-4 h-4" />
-      </button>
-    </div>
-      </div>:null}
+      { totalPages >1 && <Pagination className="text-center mt-2" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+ } </div>
+  
       </section>
     </main>
   );

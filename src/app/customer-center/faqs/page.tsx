@@ -14,11 +14,18 @@ import separator from "../../../../public/icons/separator.svg";
 import customFetch from "@/lib/customfetch";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Pagination } from "flowbite-react";
+import { constants } from "fs";
 
 export default function Page() {
   const router = useRouter();
   const [faqData, setFaqData]= useState<any>([])
   const [filteredData, setFilteredData] = useState<any>([])
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1)
+ 
+
+  const onPageChange = (page:number)=>setCurrentPage(page) 
   const handleNoticeClick = () => {
     router.push("/customer-center/announcements");
   };
@@ -258,7 +265,10 @@ onChange={(e)=>handleSearch(e.target.value)}
 
         <div className="mt-[53px] w-full max-phone:mt-[30px]">
           <AnnouncementsTable data={filteredData} /> 
-        </div>
+
+    {  totalPages > 1 &&    <Pagination className="text-center mt-2" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+     
+               }   </div>
       </section>
     </main>
   );

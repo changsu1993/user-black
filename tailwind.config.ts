@@ -6,7 +6,11 @@ const config: Config = {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
+    'node_modules/flowbite-react/lib/esm/**/*.js',
     "./src/**/*.{ts,tsx}",
+  ],
+  plugins:[
+    require('flowbite/plugin')
   ],
   theme: {
     container: {

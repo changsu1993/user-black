@@ -504,6 +504,7 @@ export default function SignUpWithIdDialog({
               {/* Buttons for small screen */}
               <div className="phone:hidden mt-[60px] flex flex-col gap-[14px]">
                 <Button
+                onClick={handleRegister}
                   variant="dark-gray"
                   className="w-full max-sm2:col-span-full max-phone:bg-[#141414] max-phone:text-[18px] max-phone:font-light"
                 >
@@ -511,6 +512,7 @@ export default function SignUpWithIdDialog({
                 </Button>
 
                 <Button
+                onClick={()=>onOpenChange?.(false)}
                   variant="dark-gray"
                   className="w-full max-sm2:col-span-full max-phone:bg-transparent max-phone:text-[18px] max-phone:font-light
                     border-[0.5px] border-solid border-[#333] text-[#000]

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
@@ -8,7 +8,7 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { SelectInput } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import DamageCaseItem from "./DamageCaseItem";
-import Pagination from "../../../components/Pagination";
+import { Pagination } from "flowbite-react";
 
 import separator from "../../../../public/icons/separator.svg";
 import downArrowWhite from "../../../../public/icons/down-arrow-white.svg";
@@ -16,19 +16,79 @@ import downArrowCustom from "../../../../public/icons/down-arrow.svg";
 import smallSearch from "../../../../public/icons/small-search-icon.svg";
 import Link from "next/link";
 import useStore from '../../../lib/damageCaseStore';
+import customFetch from "@/lib/customfetch";
+import { toast } from "react-toastify";
 export default function Page() {
   const router = useRouter();
   const [buttonClicked, setButtonClicked] = useState(false);
-const {damages} = useStore()
+const {damages,addDamage, query} = useStore()
   const handleButtonClick = () => {
     setButtonClicked(!buttonClicked);
   };
-
+const [currentPage, setCurrentPage] = useState(1)
+const [FilteredData, setFilteredData] = useState(damages[0])
+const [searchQuery, setSearchQuery] = useState("");
+const [totalPages, setTotalPages] = useState(1);
+const [searchResults, setSearchResults] = useState([]);
+const onPageChange = (value:number)=>{
+setCurrentPage(value)
+}
   const handleReport = () => {
     router.push("/file-objection");
   };
-//console.log("damages",damages);
 
+
+  const fetchDmages = async()=>{
+    if(query != null || query != undefined){
+    
+      try {
+        const response =  await customFetch.get(`api/v1/blacks/search?${query}&page=${currentPage}`)
+        if(response){
+     setFilteredData(response.data)
+          addDamage(response.data)
+         
+         // router.replace("");
+      }
+      }catch (error:any) {
+        console.log(error.response.data.message);
+        
+        toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
+      }
+    }
+
+  }
+//console.log("damages",damages);
+useEffect(() => {
+
+  fetchDmages()
+setTotalPages(damages[0].meta.last_page)
+  
+  
+  
+},[currentPage])
+
+
+const handleSearch = (searchText: string) => {
+
+
+  //   console.log('Search Text:', searchText);
+
+const filteredObjects =  FilteredData.data && FilteredData.data.filter((post:any) => {
+    return !searchText || post.damageContent.toLowerCase().includes(searchText.toLowerCase())
+  });
+console.log({filteredObjects});
+
+
+setFilteredData(searchText ? filteredObjects : damages[0]);
+};;
+
+// const handleSearch = (value: string) => {
+//   setSearchQuery(value);
+//   const filtered:any = FilteredData.data.filter((damage:any) =>
+//     damage.damageContent.toLowerCase().includes(value.toLowerCase())
+//   );
+
+// };
   return (
     <main className="min-h-screen">
       <section className="hero2-section w-full max-phone:h-[375px] h-[655px] text-white">
@@ -99,6 +159,7 @@ const {damages} = useStore()
               )}
             >
               <input
+              onChange={(e)=>handleSearch(e.target.value)}
                 type="text"
                 className={cn(
                   "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray",
@@ -248,14 +309,15 @@ const {damages} = useStore()
 
         <div className="mt-[36px]">
           <h3 className="max-phone:hidden md:text-[30px] leading-[39px] tracking-[-0.9] font-normal max-phone:text-xs text-accent">
-            NNN 제목 & 키워드의 사례가 검색되었습니다
+          {damages[0].meta.total} 개의 사례가 검색되었습니다.
           </h3>
           <div className="mt-[45px] space-y-[53px]">
-            {  damages && damages[0]?.data.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }
+            {  FilteredData && FilteredData?.data?.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }
           
             {/* <DamageCaseItem /> */}
           </div>
-      {  damages.length >0 &&  <Pagination />}
+      {  damages.length >0 &&    <Pagination className="text-center" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+  }
         </div>
       { damages.length == 0 && <div className="mt-[73px] flex flex-col items-center justify-center max-phone:mt-[28px]">
           <h2 className="font-normal text-[45px] text-accent max-phone:text-[28px] max-phone:text-dark">

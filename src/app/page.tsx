@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import useStore from '../lib/damageCaseStore';
 export default function Home() {
    const router = useRouter();
- const {addDamage } = useStore()
+ const {addDamage,setQuery } = useStore()
 
   const [searchData, setSearchData] = useState({
      name:"",
@@ -22,7 +22,7 @@ export default function Home() {
   })
 
   const handleSearchClick = async () => {
-    if(searchData.name && searchData.phone && searchData.birth){
+    if(searchData.name && searchData.phone || searchData.phone && searchData.birth ||searchData.name && searchData.birth ){
 
 
       const encodedFormData = Object.fromEntries(
@@ -35,6 +35,7 @@ export default function Home() {
 try {
   const response =  await customFetch.get(`api/v1/blacks/search?${queryParams.toString()}`)
   if(response){
+    setQuery(queryParams.toString())
     addDamage(response.data)
     toast.success("찾은 결과")
     console.log(response.data);
@@ -55,7 +56,7 @@ try {
  }
   
 else{
-      toast.error("please fill all the fields")
+      toast.error("please fill at least 2 fields")
     }
   
  

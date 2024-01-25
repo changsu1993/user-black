@@ -284,7 +284,7 @@ function FindPasswordForm() {
       const accessToken =typeof window !== 'undefined' && window.localStorage?
   // Use localStorage here
   localStorage.getItem('accessToken'):null
-      console.log(data)
+     // console.log(data)
         ;
 
       await customFetch.get(`api/v1/users/id?name=${encodeURIComponent(credData.name)}&loginId=${encodeURIComponent(credData.loginId)}&email=${encodeURIComponent(credData.email)}`, {
@@ -293,10 +293,10 @@ function FindPasswordForm() {
       }).then((res) => {
         setUserFound(true);
         setUserId(res.data.userId)
-        console.log(res.data.userId)
+       // console.log(res.data.userId)
       }).catch(
         (error: any) => {
-          console.log(error.response.data.message)
+         // console.log(error.response.data.message)
           toast.error(error.response.data.message.isArray ? error.response.data.message[0] : error.response.data.message)
         }
       )
@@ -410,9 +410,7 @@ if(changePass.confPassword != changePass.password){
             />
           </div>
           <div className="mt-[30px] w-full">
-            <p className="phone:hidden text-[#F00] text-center text-[12px] font-light mb-[20px]">
-              (입력한 정보와 일치하는 계정 정보가 없습니다)
-            </p>
+         
             <Button
               onClick={handleFindId}
               variant="dark-gray"
