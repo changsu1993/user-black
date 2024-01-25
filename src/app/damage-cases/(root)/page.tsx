@@ -8,10 +8,13 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 import back from "../../../../public/icons/back.svg";
+import { Pagination } from "flowbite-react";
 
 const DamegeCases = () => {
   const router = useRouter();
-
+const [totalPages, setTotalPages] = useState(1)
+const [currentPage, setCurrentPage] = useState(1);
+const onPageChange = (page: number) =>setCurrentPage(page)
   const handleInfo = () => {
     router.push("/my-page/info");
   };
@@ -91,6 +94,9 @@ const DamegeCases = () => {
                 <DamegeCasesTable />
 </div>
         </div>
+        {  totalPages > 1 &&    <Pagination className="text-center mt-2" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+     
+               }
       </section>
     </main>
   );

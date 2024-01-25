@@ -45,14 +45,14 @@ setCurrentPage(value)
         const response =  await customFetch.get(`api/v1/blacks/search?${query}&page=${currentPage}`)
         if(response){
      setFilteredData(response.data)
-          addDamage(response.data)
+        //  addDamage(response.data)
          
          // router.replace("");
       }
       }catch (error:any) {
-        console.log(error.response.data.message);
+       // console.log(error.response.data.message);
         
-        toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
+       // toast.error(error.response.data.message.isArray?error.response.data.message[0]:error.response.data.message)
       }
     }
 
@@ -61,11 +61,11 @@ setCurrentPage(value)
 useEffect(() => {
 
   fetchDmages()
-setTotalPages(damages[0].meta.last_page)
+setTotalPages(damages[0]?.meta.last_page)
   
   
   
-},[currentPage])
+},[])
 
 
 const handleSearch = (searchText: string) => {
@@ -73,7 +73,7 @@ const handleSearch = (searchText: string) => {
 
   //   console.log('Search Text:', searchText);
 
-const filteredObjects =  FilteredData.data && FilteredData.data.filter((post:any) => {
+const filteredObjects =  FilteredData.data && FilteredData?.data.filter((post:any) => {
     return !searchText || post.damageContent.toLowerCase().includes(searchText.toLowerCase())
   });
 console.log({filteredObjects});
@@ -161,8 +161,9 @@ setFilteredData(searchText ? filteredObjects : damages[0]);
               <input
               onChange={(e)=>handleSearch(e.target.value)}
                 type="text"
+                style={{border:'0px !important' ,boxShadow:'none' ,  outline:'none !important'}}
                 className={cn(
-                  "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray",
+                  "border-0 flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray",
                   "text-[25px] p-5 font-normal leading-[33px] tracking-[-0.75px] max-phone:text-sm max-phone:font-extralight max-phone:tracking-[-0.48px]"
                 )}
                 placeholder="제목 & 키워드를 검색해 주세요"
@@ -309,7 +310,7 @@ setFilteredData(searchText ? filteredObjects : damages[0]);
 
         <div className="mt-[36px]">
           <h3 className="max-phone:hidden md:text-[30px] leading-[39px] tracking-[-0.9] font-normal max-phone:text-xs text-accent">
-          {damages[0].meta.total} 개의 사례가 검색되었습니다.
+          {damages[0]?.meta.total} 개의 사례가 검색되었습니다.
           </h3>
           <div className="mt-[45px] space-y-[53px]">
             {  FilteredData && FilteredData?.data?.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }

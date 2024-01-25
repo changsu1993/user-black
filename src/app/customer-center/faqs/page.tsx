@@ -182,8 +182,11 @@ useEffect(() => {
               <input
 onChange={(e)=>handleSearch(e.target.value)}
                 type="text"
+           
+                style={{border:'0px !important' ,boxShadow:'none' ,  outline:'none !important'}}
+           
                 className={cn(
-                  "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
+                  "border-0 flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
                   "text-[25px] font-normal leading-[33px] tracking-[-0.75px] max-sm:text-xl max-sm:w-72 max-phone:w-[16rem] max-phone:text-[16px]"
                 )}
                 placeholder="제목 & 키워드를 검색해 주세요"

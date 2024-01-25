@@ -200,10 +200,12 @@ console.log({filteredObjects});
             >
               <input
                 type="text"
+                style={{border:'0px !important' ,boxShadow:'none' ,  outline:'0px !important'}}
+              
                 onChange={(e)=>handleSearch(e.target.value)}
                 className={cn(
-                  "flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
-                  "text-[25px] font-normal leading-[33px] tracking-[-0.75px] max-phone:w-[16rem] max-phone:text-[16px]"
+                  "border-transparent focus:border-transparent focus:outline-none   flex-1 bg-transparent focus-visible:outline-none text-dark33 placeholder:text-d9gray max-phone:text-white max-phone:placeholder:text-[#acacac] max-phone:placeholder:font-light",
+                  " text-[25px] font-normal leading-[33px] tracking-[-0.75px] max-phone:w-[16rem] max-phone:text-[16px]"
                 )}
                 placeholder="제목 & 키워드를 검색해 주세요"
               />

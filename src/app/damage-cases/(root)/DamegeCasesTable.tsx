@@ -431,9 +431,7 @@ const hanldenavigation = (index:any)=>{
         })}
       </main>
 
-      <div className="flex justify-center max-phone:hidden">
-        <Pagination />
-      </div>
+      
     </>
   );
 };
