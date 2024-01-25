@@ -18,6 +18,7 @@ import Link from "next/link";
 import useStore from '../../../lib/damageCaseStore';
 import customFetch from "@/lib/customfetch";
 import { toast } from "react-toastify";
+import { log } from "console";
 export default function Page() {
   const router = useRouter();
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -26,7 +27,7 @@ const {damages,addDamage, query} = useStore()
     setButtonClicked(!buttonClicked);
   };
 const [currentPage, setCurrentPage] = useState(1)
-const [FilteredData, setFilteredData] = useState(damages[0])
+const [FilteredData, setFilteredData] = useState([])
 const [searchQuery, setSearchQuery] = useState("");
 const [totalPages, setTotalPages] = useState(1);
 const [searchResults, setSearchResults] = useState([]);
@@ -65,30 +66,27 @@ setTotalPages(damages[0]?.meta.last_page)
   
   
   
-},[])
+},[currentPage])
 
 
-const handleSearch = (searchText: string) => {
+
+
+
+
 
 
   //   console.log('Search Text:', searchText);
 
-const filteredObjects =  FilteredData.data && FilteredData?.data.filter((post:any) => {
-    return !searchText || post.damageContent.toLowerCase().includes(searchText.toLowerCase())
+const filteredObjects =   damages[0]?.data.filter((post:any) => {
+    return !searchQuery || post.damageContent.toLowerCase().includes(searchQuery.toLowerCase())
   });
-console.log({filteredObjects});
 
 
-setFilteredData(searchText ? filteredObjects : damages[0]);
-};;
+console.log("data was ",damages );
 
-// const handleSearch = (value: string) => {
-//   setSearchQuery(value);
-//   const filtered:any = FilteredData.data.filter((damage:any) =>
-//     damage.damageContent.toLowerCase().includes(value.toLowerCase())
-//   );
+useEffect(()=>{
 
-// };
+},[searchQuery])
   return (
     <main className="min-h-screen">
       <section className="hero2-section w-full max-phone:h-[375px] h-[655px] text-white">
@@ -159,7 +157,7 @@ setFilteredData(searchText ? filteredObjects : damages[0]);
               )}
             >
               <input
-              onChange={(e)=>handleSearch(e.target.value)}
+              onChange={(e)=>setSearchQuery(e.target.value)}
                 type="text"
                 style={{border:'0px !important' ,boxShadow:'none' ,  outline:'none !important'}}
                 className={cn(
@@ -313,7 +311,7 @@ setFilteredData(searchText ? filteredObjects : damages[0]);
           {damages[0]?.meta.total} 개의 사례가 검색되었습니다.
           </h3>
           <div className="mt-[45px] space-y-[53px]">
-            {  FilteredData && FilteredData?.data?.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }
+            {   filteredObjects?.map((data:any, index:any)=> ( <DamageCaseItem key={index} data={data} />)) }
           
             {/* <DamageCaseItem /> */}
           </div>

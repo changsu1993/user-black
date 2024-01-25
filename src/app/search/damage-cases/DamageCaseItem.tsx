@@ -3,6 +3,7 @@ import { useState } from "react";
 import FileObjectionDialog from "@/components/dialogs/FileObjection";
 import ImageViewDialog from "@/components/dialogs/ImageView";
 import ImageViewDialogSmall from "@/components/dialogs/ImageViewSmallScreen";
+import { log } from "console";
 interface PropType{
   data:any
 }
@@ -18,6 +19,7 @@ export default function DamageCaseItem({data}:PropType) {
   const handleDotClick = (index: any) => {
     setActiveIndex(index);
   };
+console.log("data is ", data);
 
   return (
     <div className="pt-[39px] pl-[47px] pr-[72px] pb-[70px] rounded-[30px] bg-f6gray relative group max-phone:pl-[19px] max-phone:pr-[21px] max-phone:pt-[15px] max-phone:pb-[20px] max-phone:rounded-[15px]">
